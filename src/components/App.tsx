@@ -1,5 +1,5 @@
 import {useCallback, useState} from "react";
-import {FaGear, FaDatabase, FaPlay} from "react-icons/fa6";
+import {FaGear, FaDatabase, FaPlay, FaFont, FaHashtag, FaAnglesLeft} from "react-icons/fa6";
 
 const ICON_SIZE = 28;
 
@@ -36,7 +36,7 @@ function App() {
       </div>
       <div className="grow p-4">
         {!googleLoggedIn ? (
-          <button className="p-3 bg-neutral-300 rounded" onClick={handleButtonClick}>Link Google Sheets</button>
+          <button className="p-3 bg-neutral-200 rounded" onClick={handleButtonClick}>Link Google Sheets</button>
         ) : (
           <>
             {sheetNames.length == 0 ? (
@@ -49,7 +49,7 @@ function App() {
                   onChange={(e) => setGoogleSpreadsheetId(e.target.value)}
                   className="block border-2 border-neutral-300 w-full h-10 mb-2 p-1 rounded"
                 />
-                <button onClick={handleContinueClick} className="p-3 bg-neutral-300 rounded">Continue</button>
+                <button onClick={handleContinueClick} className="p-3 bg-neutral-200 rounded">Continue</button>
               </>
             ) : (
               <>
@@ -60,6 +60,16 @@ function App() {
             )}
           </>
         )}
+      </div>
+      <div className="h-20 flex items-center gap-4 justify-center text-2xl mb-1">
+        <button className="rounded-full bg-neutral-200 h-16 w-16">漢字</button>
+        <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center"><FaFont/></button>
+        <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center"><FaAnglesLeft /></button>
+        <button className="rounded-full bg-neutral-200 h-16 w-16 font-bold">EN</button>
+        <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center"><FaHashtag/></button>
+      </div>
+      <div className="h-16 flex items-center pl-4 pr-4 bg-green-500 justify-center">
+        <div className="text-white text-3xl font-bold">NEXT</div>
       </div>
     </div>
   )
