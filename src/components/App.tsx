@@ -1,11 +1,12 @@
 import {useCallback, useState} from "react";
 import {FaGear, FaDatabase, FaPlay, FaHashtag, FaAnglesLeft, FaCircleQuestion} from "react-icons/fa6";
 import { RxLetterCaseCapitalize } from "react-icons/rx";
+import CircleButton from "./CircleButton.tsx";
 
 
 const ICON_SIZE = 24;
 
-function App() {
+const App = () => {
   const [googleLoggedIn, setGoogleLoggedIn] = useState<boolean>(false);
   const [googleSpreadsheetId, setGoogleSpreadsheetId] = useState<string>();
   const [sheetNames, setSheetNames] = useState<string[]>([]);
@@ -29,7 +30,6 @@ function App() {
     <div className="flex flex-col items-stretch h-full">
       <div className="h-16 bg-neutral-800 flex items-center pl-4 pr-4 text-white">
         <div className="text-4xl pb-2 font-bold">jijo</div>
-        <div className="text-lg ml-2">v0.1</div>
         <div className="top-menu ml-auto flex gap-4">
           <FaPlay size={ICON_SIZE} />
           <FaGear size={ICON_SIZE} />
@@ -65,11 +65,11 @@ function App() {
         )}
       </div>
       <div className="h-20 flex items-center gap-2 justify-center text-2xl mb-1">
-        <button className="rounded-full bg-neutral-200 h-16 w-16">漢字</button>
-        <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center text-4xl"><RxLetterCaseCapitalize /></button>
-        <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center"><FaAnglesLeft /></button>
-        <button className="rounded-full bg-neutral-200 h-16 w-16 font-bold">EN</button>
-        <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center"><FaHashtag/></button>
+        <CircleButton>漢字</CircleButton>
+        <CircleButton><span className="text-4xl"><RxLetterCaseCapitalize /></span></CircleButton>
+        <CircleButton><FaAnglesLeft /></CircleButton>
+        <CircleButton><span className="font-bold">EN</span></CircleButton>
+        <CircleButton><FaHashtag /></CircleButton>
       </div>
       <div className="h-16 flex items-center pl-4 pr-4 bg-violet-500 justify-center">
         <div className="text-white text-2xl font-bold">NEXT</div>
