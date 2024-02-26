@@ -27,6 +27,7 @@ function App() {
     <div className="flex flex-col items-stretch h-full">
       <div className="h-16 bg-violet-500 flex items-center pl-4 pr-4 text-white">
         <div className="text-4xl pb-2 font-bold">jijo</div>
+        <div className="text-lg ml-2">v0.1</div>
         <div className="top-menu ml-auto flex gap-4">
           <FaPlay size={ICON_SIZE} />
           <FaGear size={ICON_SIZE} />
