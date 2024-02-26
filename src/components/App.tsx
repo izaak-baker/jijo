@@ -27,7 +27,7 @@ function App() {
 
   return (
     <div className="flex flex-col items-stretch h-full">
-      <div className="h-16 bg-violet-500 flex items-center pl-4 pr-4 text-white">
+      <div className="h-16 bg-neutral-800 flex items-center pl-4 pr-4 text-white">
         <div className="text-4xl pb-2 font-bold">jijo</div>
         <div className="text-lg ml-2">v0.1</div>
         <div className="top-menu ml-auto flex gap-4">
@@ -70,7 +70,7 @@ function App() {
         <button className="rounded-full bg-neutral-200 h-16 w-16 font-bold">EN</button>
         <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center"><FaHashtag/></button>
       </div>
-      <div className="h-16 flex items-center pl-4 pr-4 bg-green-500 justify-center">
+      <div className="h-16 flex items-center pl-4 pr-4 bg-violet-500 justify-center">
         <div className="text-white text-3xl font-bold">NEXT</div>
       </div>
     </div>
