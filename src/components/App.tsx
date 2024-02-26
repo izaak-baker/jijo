@@ -6,8 +6,8 @@ function App() {
       <div className="h-16 bg-violet-500 flex">
         <img alt="logo" src={jijoLogo} className="w-16 h-16" />
       </div>
-      <div className="grow">
-        Foo
+      <div className="grow p-4">
+        <button className="p-3 bg-neutral-300 rounded-full">Link Google Sheets</button>
       </div>
     </div>
   )
