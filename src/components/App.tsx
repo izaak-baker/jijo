@@ -1,9 +1,9 @@
 import {useCallback, useState} from "react";
-import {FaGear, FaDatabase, FaPlay, FaHashtag, FaAnglesLeft} from "react-icons/fa6";
+import {FaGear, FaDatabase, FaPlay, FaHashtag, FaAnglesLeft, FaCircleQuestion} from "react-icons/fa6";
 import { RxLetterCaseCapitalize } from "react-icons/rx";
 
 
-const ICON_SIZE = 28;
+const ICON_SIZE = 24;
 
 function App() {
   const [googleLoggedIn, setGoogleLoggedIn] = useState<boolean>(false);
@@ -34,6 +34,7 @@ function App() {
           <FaPlay size={ICON_SIZE} />
           <FaGear size={ICON_SIZE} />
           <FaDatabase size={ICON_SIZE} />
+          <FaCircleQuestion size={ICON_SIZE} />
         </div>
       </div>
       <div className="grow p-4">
@@ -63,7 +64,7 @@ function App() {
           </>
         )}
       </div>
-      <div className="h-20 flex items-center gap-4 justify-center text-2xl mb-1">
+      <div className="h-20 flex items-center gap-2 justify-center text-2xl mb-1">
         <button className="rounded-full bg-neutral-200 h-16 w-16">漢字</button>
         <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center text-4xl"><RxLetterCaseCapitalize /></button>
         <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center"><FaAnglesLeft /></button>
@@ -71,7 +72,7 @@ function App() {
         <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center"><FaHashtag/></button>
       </div>
       <div className="h-16 flex items-center pl-4 pr-4 bg-violet-500 justify-center">
-        <div className="text-white text-3xl font-bold">NEXT</div>
+        <div className="text-white text-2xl font-bold">NEXT</div>
       </div>
     </div>
   )
