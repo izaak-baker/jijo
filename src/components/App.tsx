@@ -14,6 +14,8 @@ function App() {
     if (googleSpreadsheetId) {
       window.getGoogleSpreadsheet(googleSpreadsheetId).then((result) => {
         console.log(result);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         setSheetNames(result?.result?.sheets?.map(({ properties }) => properties.title));
       });
     }
