@@ -1,5 +1,7 @@
-import jijoLogo from '../assets/jijo.png';
 import {useCallback, useState} from "react";
+import {FaGear, FaDatabase, FaPlay} from "react-icons/fa6";
+
+const ICON_SIZE = 28;
 
 function App() {
   const [googleLoggedIn, setGoogleLoggedIn] = useState<boolean>(false);
@@ -23,8 +25,13 @@ function App() {
 
   return (
     <div className="flex flex-col items-stretch h-full">
-      <div className="h-16 bg-violet-500 flex">
-        <img alt="logo" src={jijoLogo} className="w-16 h-16" />
+      <div className="h-16 bg-violet-500 flex items-center pl-4 pr-4 text-white">
+        <div className="text-4xl pb-2 font-bold">jijo</div>
+        <div className="top-menu ml-auto flex gap-4">
+          <FaPlay size={ICON_SIZE} />
+          <FaGear size={ICON_SIZE} />
+          <FaDatabase size={ICON_SIZE} />
+        </div>
       </div>
       <div className="grow p-4">
         {!googleLoggedIn ? (
