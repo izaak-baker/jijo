@@ -1,5 +1,7 @@
 import {useCallback, useState} from "react";
-import {FaGear, FaDatabase, FaPlay, FaFont, FaHashtag, FaAnglesLeft} from "react-icons/fa6";
+import {FaGear, FaDatabase, FaPlay, FaHashtag, FaAnglesLeft} from "react-icons/fa6";
+import { RxLetterCaseCapitalize } from "react-icons/rx";
+
 
 const ICON_SIZE = 28;
 
@@ -63,7 +65,7 @@ function App() {
       </div>
       <div className="h-20 flex items-center gap-4 justify-center text-2xl mb-1">
         <button className="rounded-full bg-neutral-200 h-16 w-16">漢字</button>
-        <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center"><FaFont/></button>
+        <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center text-4xl"><RxLetterCaseCapitalize /></button>
         <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center"><FaAnglesLeft /></button>
         <button className="rounded-full bg-neutral-200 h-16 w-16 font-bold">EN</button>
         <button className="rounded-full bg-neutral-200 h-16 w-16 flex items-center justify-center"><FaHashtag/></button>
