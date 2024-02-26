@@ -69,7 +69,7 @@ const App = () => {
       </div>
       <div className="h-20 flex items-center gap-2 justify-center text-2xl mb-1">
         <CircleButton active={display.target} onClick={() => toggleDisplay('target')}>
-          <span className="jj-han">漢字</span>
+          漢字
         </CircleButton>
         <CircleButton active={display.romanized} onClick={() => toggleDisplay('romanized')}>
           <span className="text-4xl"><RxLetterCaseCapitalize /></span>
