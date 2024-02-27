@@ -12,10 +12,10 @@ const Play = () => {
     <div className="flex flex-col items-stretch h-full">
       <div className="grow p-4 flex flex-col items-center justify-center">
         <div className="flex flex-col gap-4 items-center">
-          <div className="text-8xl font-bold text-neutral-300">
+          <div className="text-7xl font-bold text-neutral-300">
             自助
           </div>
-          <div className="text-lg text-neutral-500">
+          <div className="text-lg text-neutral-400">
             No vocabulary configured.
           </div>
         </div>
