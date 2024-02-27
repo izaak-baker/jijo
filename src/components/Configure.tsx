@@ -45,7 +45,7 @@ const Configure = () => {
             items.push({
               target: row[0].split(""),
               romanization: row[1].split(/\s+/),
-              native: row[2],
+              native: [row[2]],
               tags
             });
           } else if (row[0].startsWith('Lesson')) {

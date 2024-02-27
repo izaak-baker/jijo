@@ -2,23 +2,38 @@ import CircleButton from "./CircleButton.tsx";
 import {RxLetterCaseCapitalize} from "react-icons/rx";
 import {FaAnglesLeft, FaHashtag} from "react-icons/fa6";
 import {useDisplayStore} from "../state/displayState.ts";
+import {useCorpusStore} from "../state/corpusState.ts";
+import {useGameStore} from "../state/gameState.ts";
+import {useCallback} from "react";
+import CorpusItemCard from "./CorpusItemCard.tsx";
 
 const Play = () => {
-
   const display = useDisplayStore((state) => state.display);
+  const corpus = useCorpusStore((state) => state.corpus);
+  const chosenItem = useGameStore((state) => state.chosenItem);
   const toggleDisplay = useDisplayStore((state) => state.toggleDisplay);
+  const setChosenItem = useGameStore((state) => state.setChosenItem);
+
+  const handleNextButtonClick = useCallback(() => {
+    const indexChosen = Math.floor(Math.random() * corpus.length);
+    setChosenItem(corpus[indexChosen]);
+  }, [corpus, setChosenItem]);
 
   return (
     <div className="flex flex-col items-stretch h-full">
       <div className="grow p-4 flex flex-col items-center justify-center">
-        <div className="flex flex-col gap-4 items-center">
-          <div className="text-7xl font-bold text-neutral-300">
-            自助
+        {!chosenItem ? (
+          <div className="flex flex-col gap-4 items-center">
+            <div className="text-7xl font-bold text-neutral-300">
+              自助
+            </div>
+            <div className="text-lg text-neutral-400">
+              {corpus.length === 0 ? <span>No vocabulary configured</span> : <span>Click <strong>Next</strong> to begin!</span>}
+            </div>
           </div>
-          <div className="text-lg text-neutral-400">
-            No vocabulary configured.
-          </div>
-        </div>
+        ) : (
+          <CorpusItemCard item={chosenItem} />
+        )}
       </div>
       <div className="h-20 flex items-center gap-2 justify-center text-2xl mb-1">
         <CircleButton active={display.target} onClick={() => toggleDisplay('target')}>
@@ -37,7 +52,7 @@ const Play = () => {
           <FaHashtag/>
         </CircleButton>
       </div>
-      <div className="h-16 flex items-center pl-4 pr-4 bg-violet-500 justify-center">
+      <div className="h-16 flex items-center pl-4 pr-4 bg-violet-500 justify-center" onClick={handleNextButtonClick}>
         <div className="text-white text-2xl font-bold">NEXT</div>
       </div>
     </div>
