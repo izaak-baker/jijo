@@ -65,14 +65,7 @@
             resolve();
           };
           if (gapi.client.getToken() === null) {
-            const storedToken = localStorage.getItem(ACCESS_TOKEN_LS_KEY);
-            console.log(storedToken);
-            if (storedToken) {
-              gapi.client.setToken({ access_token: storedToken });
-              resolve();
-            } else {
-              tokenClient.requestAccessToken({prompt: 'consent'});
-            }
+            tokenClient.requestAccessToken({prompt: 'consent'});
           } else {
             tokenClient.requestAccessToken({prompt: ''});
           }
@@ -81,6 +74,28 @@
 
       function getGoogleSpreadsheet(spreadsheetId) {
         return gapi.client.sheets.spreadsheets.get({ spreadsheetId });
+      }
+
+      function googleLogout() {
+        const token = gapi.client.getToken();
+        if (token != null) {
+          google.accounts.oauth2.revoke(token.access_token);
+          gapi.client.setToken('');
+        }
+        localStorage.removeItem(ACCESS_TOKEN_LS_KEY);
+      }
+
+      function trySetupClientFromStorage() {
+        const storedToken = localStorage.getItem(ACCESS_TOKEN_LS_KEY);
+        if (storedToken) {
+          gapi.client.setToken({access_token: storedToken});
+          return true;
+        }
+        return false;
+      }
+
+      function getSpreadsheetValues(spreadsheetId, range) {
+        return gapi.client.sheets.spreadsheets.values.get({ spreadsheetId, range })
       }
     </script>
     <script type="module" src="/src/main.tsx"></script>

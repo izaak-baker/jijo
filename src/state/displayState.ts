@@ -1,13 +1,13 @@
 import {create} from "zustand";
 
-type DisplayOptions = {
+export type DisplayOptions = {
   target: boolean;
   romanized: boolean;
   native: boolean;
   tags: boolean;
 };
 
-type DisplayStoreState = {
+export type DisplayStoreState = {
   display: DisplayOptions;
   toggleDisplay(key: string): void;
 }

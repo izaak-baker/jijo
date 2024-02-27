@@ -1,7 +1,7 @@
 import CircleButton from "./CircleButton.tsx";
 import {RxLetterCaseCapitalize} from "react-icons/rx";
 import {FaAnglesLeft, FaHashtag} from "react-icons/fa6";
-import {useDisplayStore} from "../state.ts";
+import {useDisplayStore} from "../state/displayState.ts";
 
 const Play = () => {
 
