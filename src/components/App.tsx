@@ -1,5 +1,5 @@
-import {FaGear, FaDatabase, FaPlay, FaCircleQuestion} from "react-icons/fa6";
-import {Link, Route, Switch, useLocation} from "wouter";
+import { FaGear, FaDatabase, FaPlay, FaCircleQuestion } from "react-icons/fa6";
+import { Link, Route, Switch, useLocation } from "wouter";
 import Configure from "./Configure.tsx";
 import Docs from "./Docs.tsx";
 import Settings from "./Settings.tsx";
@@ -16,16 +16,28 @@ const App = () => {
         <div className="text-4xl pb-2 font-bold text-violet-400">jijo</div>
         <div className="top-menu ml-auto flex gap-4 text-neutral-400">
           <Link to="/">
-            <FaPlay size={ICON_SIZE} className={location === "/" ? "text-white" : ""}/>
+            <FaPlay
+              size={ICON_SIZE}
+              className={location === "/" ? "text-white" : ""}
+            />
           </Link>
           <Link to="/settings">
-            <FaGear size={ICON_SIZE} className={location === "/settings" ? "text-white" : ""}/>
+            <FaGear
+              size={ICON_SIZE}
+              className={location === "/settings" ? "text-white" : ""}
+            />
           </Link>
           <Link to="/configure">
-            <FaDatabase size={ICON_SIZE} className={location === "/configure" ? "text-white" : ""}/>
+            <FaDatabase
+              size={ICON_SIZE}
+              className={location === "/configure" ? "text-white" : ""}
+            />
           </Link>
           <Link to="/docs">
-            <FaCircleQuestion size={ICON_SIZE} className={location === "/docs" ? "text-white" : ""}/>
+            <FaCircleQuestion
+              size={ICON_SIZE}
+              className={location === "/docs" ? "text-white" : ""}
+            />
           </Link>
         </div>
       </div>
@@ -38,7 +50,7 @@ const App = () => {
         </Switch>
       </div>
     </div>
-  )
+  );
 };
 
 export default App;

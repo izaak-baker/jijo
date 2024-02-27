@@ -1,10 +1,10 @@
 import CircleButton from "./CircleButton.tsx";
-import {RxLetterCaseCapitalize} from "react-icons/rx";
-import {FaAnglesLeft, FaHashtag} from "react-icons/fa6";
-import {useDisplayStore} from "../state/displayState.ts";
-import {useCorpusStore} from "../state/corpusState.ts";
-import {useGameStore} from "../state/gameState.ts";
-import {useCallback} from "react";
+import { RxLetterCaseCapitalize } from "react-icons/rx";
+import { FaAnglesLeft, FaHashtag } from "react-icons/fa6";
+import { useDisplayStore } from "../state/displayState.ts";
+import { useCorpusStore } from "../state/corpusState.ts";
+import { useGameStore } from "../state/gameState.ts";
+import { useCallback } from "react";
 import CorpusItemCard from "./CorpusItemCard.tsx";
 
 const Play = () => {
@@ -24,11 +24,15 @@ const Play = () => {
       <div className="grow p-4 flex flex-col items-center justify-center">
         {!chosenItem ? (
           <div className="flex flex-col gap-4 items-center">
-            <div className="text-7xl font-bold text-neutral-300">
-              自助
-            </div>
+            <div className="text-7xl font-bold text-neutral-300">自助</div>
             <div className="text-lg text-neutral-400">
-              {corpus.length === 0 ? <span>No vocabulary configured</span> : <span>Click <strong>Next</strong> to begin!</span>}
+              {corpus.length === 0 ? (
+                <span>No vocabulary configured</span>
+              ) : (
+                <span>
+                  Click <strong>Next</strong> to begin!
+                </span>
+              )}
             </div>
           </div>
         ) : (
@@ -36,29 +40,46 @@ const Play = () => {
         )}
       </div>
       <div className="h-20 flex items-center gap-2 justify-center text-2xl mb-1">
-        <CircleButton active={display.target} onClick={() => toggleDisplay('target')}>
+        <CircleButton
+          active={display.target}
+          onClick={() => toggleDisplay("target")}
+        >
           漢字
         </CircleButton>
-        <CircleButton active={display.romanized} onClick={() => toggleDisplay('romanized')}>
-          <span className="text-4xl"><RxLetterCaseCapitalize/></span>
-        </CircleButton>
-        <CircleButton active={display.target || display.romanized} onClick={
-            () => {
-              toggleDisplay('target');
-              toggleDisplay('romanized');
-            }
-          }
+        <CircleButton
+          active={display.romanized}
+          onClick={() => toggleDisplay("romanized")}
         >
-          <FaAnglesLeft/>
+          <span className="text-4xl">
+            <RxLetterCaseCapitalize />
+          </span>
         </CircleButton>
-        <CircleButton active={display.native} onClick={() => toggleDisplay('native')}>
+        <CircleButton
+          active={display.target || display.romanized}
+          onClick={() => {
+            toggleDisplay("target");
+            toggleDisplay("romanized");
+          }}
+        >
+          <FaAnglesLeft />
+        </CircleButton>
+        <CircleButton
+          active={display.native}
+          onClick={() => toggleDisplay("native")}
+        >
           <span className="font-bold">EN</span>
         </CircleButton>
-        <CircleButton active={display.tags} onClick={() => toggleDisplay('tags')}>
-          <FaHashtag/>
+        <CircleButton
+          active={display.tags}
+          onClick={() => toggleDisplay("tags")}
+        >
+          <FaHashtag />
         </CircleButton>
       </div>
-      <div className="h-16 flex items-center pl-4 pr-4 bg-violet-500 justify-center" onClick={handleNextButtonClick}>
+      <div
+        className="h-16 flex items-center pl-4 pr-4 bg-violet-500 justify-center"
+        onClick={handleNextButtonClick}
+      >
         <div className="text-white text-2xl font-bold">NEXT</div>
       </div>
     </div>

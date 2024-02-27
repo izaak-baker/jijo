@@ -1,4 +1,4 @@
-import {create} from "zustand";
+import { create } from "zustand";
 
 export type DisplayOptions = {
   target: boolean;
@@ -10,22 +10,22 @@ export type DisplayOptions = {
 export type DisplayStoreState = {
   display: DisplayOptions;
   toggleDisplay(key: string): void;
-}
+};
 
 export const useDisplayStore = create<DisplayStoreState>((set) => ({
   display: {
     target: true,
     romanized: true,
     native: true,
-    tags: true
+    tags: true,
   },
   toggleDisplay(key: keyof DisplayOptions) {
     set((state) => ({
       ...state,
       display: {
         ...state.display,
-        [key]: !state.display[key]
-      }
+        [key]: !state.display[key],
+      },
     }));
-  }
+  },
 }));
