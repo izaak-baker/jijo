@@ -42,7 +42,13 @@ const Play = () => {
         <CircleButton active={display.romanized} onClick={() => toggleDisplay('romanized')}>
           <span className="text-4xl"><RxLetterCaseCapitalize/></span>
         </CircleButton>
-        <CircleButton active={display.target || display.romanized}>
+        <CircleButton active={display.target || display.romanized} onClick={
+            () => {
+              toggleDisplay('target');
+              toggleDisplay('romanized');
+            }
+          }
+        >
           <FaAnglesLeft/>
         </CircleButton>
         <CircleButton active={display.native} onClick={() => toggleDisplay('native')}>
