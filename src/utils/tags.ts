@@ -54,16 +54,17 @@ export function itemTag(value: string, key?: string): ItemTag {
 
 export function notExcluded(excludedTagOptions: TagOptions) {
   return (item: CorpusItem) => {
+    const includedTags = [];
     for (const tag of item.tags) {
       const key = tagKey(tag);
       const value = tagValue(tag);
-      if (
+      const tagIsExcluded =
         Object.hasOwn(excludedTagOptions, key) &&
-        excludedTagOptions[key].has(value)
-      ) {
-        return false;
+        excludedTagOptions[key].has(value);
+      if (!tagIsExcluded) {
+        includedTags.push(tag);
       }
     }
-    return true;
+    return includedTags.length > 0;
   };
 }
