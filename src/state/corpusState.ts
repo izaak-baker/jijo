@@ -1,11 +1,5 @@
 import { create } from "zustand";
-
-export type ItemTag =
-  | {
-      key: string;
-      value: string;
-    }
-  | string;
+import { collectTagOptions, ItemTag, TagOptions } from "../utils/tags.ts";
 
 export type CorpusItem = {
   target: string[];
@@ -16,15 +10,19 @@ export type CorpusItem = {
 
 export type CorpusState = {
   corpus: CorpusItem[];
+  tagOptions: TagOptions;
   setCorpus(corpus: CorpusItem[]): void;
 };
 
 export const useCorpusStore = create<CorpusState>((set) => ({
   corpus: [],
+  tagOptions: {},
   setCorpus(corpus: CorpusItem[]) {
+    const tagOptions = collectTagOptions(corpus);
     set((state) => ({
       ...state,
       corpus,
+      tagOptions,
     }));
   },
 }));

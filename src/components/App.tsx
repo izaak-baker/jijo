@@ -12,7 +12,7 @@ const App = () => {
 
   return (
     <div className="flex flex-col items-stretch h-full">
-      <div className="h-16 bg-neutral-800 flex items-center pl-4 pr-4 text-white">
+      <div className="h-16 bg-neutral-800 flex items-center pl-4 pr-4 text-white shrink-0">
         <div className="text-4xl pb-2 font-bold text-violet-400">jijo</div>
         <div className="top-menu ml-auto flex gap-4 text-neutral-400">
           <Link to="/">
@@ -41,7 +41,7 @@ const App = () => {
           </Link>
         </div>
       </div>
-      <div className="grow">
+      <div className="grow overflow-y-auto">
         <Switch>
           <Route path="/configure" component={Configure} />
           <Route path="/docs" component={Docs} />

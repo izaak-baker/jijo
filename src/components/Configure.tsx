@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { CorpusItem, useCorpusStore } from "../state/corpusState.ts";
+import { tag } from "../utils/tags.ts";
 
 const Configure = () => {
   const [googleLoggedIn, setGoogleLoggedIn] = useState<boolean>(false);
@@ -20,11 +21,9 @@ const Configure = () => {
     const loadCorpus = async () => {
       const spreadsheetResponse =
         await window.getGoogleSpreadsheet(spreadsheetId);
-      console.log(spreadsheetResponse);
       const sheetNames = spreadsheetResponse?.result?.sheets
         ?.map((sheet: any) => sheet.properties.title)
         ?.filter((title: string) => title.includes("Vocab"));
-      console.log(sheetNames);
       if (!sheetNames) return;
       const items: CorpusItem[] = [];
       for (const sheetName of sheetNames) {
@@ -41,8 +40,8 @@ const Configure = () => {
         for (const row of range.values) {
           if (row.length === 0) continue;
           const tags = [];
-          if (lessonTag) tags.push({ key: "Lesson", value: lessonTag });
-          if (subjectTag) tags.push({ key: "Subject", value: subjectTag });
+          if (lessonTag) tags.push(tag(lessonTag, "Lesson"));
+          if (subjectTag) tags.push(tag(subjectTag, "Subject"));
           if (row[2]) {
             items.push({
               target: row[0].split(""),
@@ -57,7 +56,6 @@ const Configure = () => {
           }
         }
       }
-      console.log(items);
       setCorpus(items);
     };
     loadCorpus().catch(console.error);
