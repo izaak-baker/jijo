@@ -47,7 +47,23 @@ export function tagValue(tag: ItemTag): string {
   return typeof tag === "string" ? tag : tag.value;
 }
 
-export function tag(value: string, key?: string): ItemTag {
+export function itemTag(value: string, key?: string): ItemTag {
   if (key) return { key, value };
   return value;
+}
+
+export function notExcluded(excludedTagOptions: TagOptions) {
+  return (item: CorpusItem) => {
+    for (const tag of item.tags) {
+      const key = tagKey(tag);
+      const value = tagValue(tag);
+      if (
+        Object.hasOwn(excludedTagOptions, key) &&
+        excludedTagOptions[key].has(value)
+      ) {
+        return false;
+      }
+    }
+    return true;
+  };
 }

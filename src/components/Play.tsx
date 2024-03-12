@@ -10,14 +10,15 @@ import CorpusItemCard from "./CorpusItemCard.tsx";
 const Play = () => {
   const display = useDisplayStore((state) => state.display);
   const corpus = useCorpusStore((state) => state.corpus);
+  const filteredCorpus = useCorpusStore((state) => state.filteredCorpus);
   const chosenItem = useGameStore((state) => state.chosenItem);
   const toggleDisplay = useDisplayStore((state) => state.toggleDisplay);
   const setChosenItem = useGameStore((state) => state.setChosenItem);
 
   const handleNextButtonClick = useCallback(() => {
-    const indexChosen = Math.floor(Math.random() * corpus.length);
-    setChosenItem(corpus[indexChosen]);
-  }, [corpus, setChosenItem]);
+    const indexChosen = Math.floor(Math.random() * filteredCorpus.length);
+    setChosenItem(filteredCorpus[indexChosen]);
+  }, [setChosenItem, filteredCorpus]);
 
   return (
     <div className="flex flex-col items-stretch h-full">
@@ -26,8 +27,8 @@ const Play = () => {
           <div className="flex flex-col gap-4 items-center">
             <div className="text-7xl font-bold text-neutral-300">自助</div>
             <div className="text-lg text-neutral-400">
-              {corpus.length === 0 ? (
-                <span>No vocabulary configured</span>
+              {filteredCorpus.length === 0 ? (
+                <span>No vocabulary! ({corpus.length} in Dictionary)</span>
               ) : (
                 <span>
                   Click <strong>Next</strong> to begin!
