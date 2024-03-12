@@ -1,6 +1,7 @@
 import { CorpusItem } from "../state/corpusState.ts";
 
 export const STRING_TAG_KEY = "_";
+export type FilterType = "all" | "any";
 export type TagOptions = { [key: string]: Set<string> };
 export type ItemTag =
   | {
@@ -52,7 +53,10 @@ export function itemTag(value: string, key?: string): ItemTag {
   return value;
 }
 
-export function notExcluded(excludedTagOptions: TagOptions) {
+export function notExcluded(
+  excludedTagOptions: TagOptions,
+  filterType: FilterType,
+) {
   return (item: CorpusItem) => {
     const includedTags = [];
     for (const tag of item.tags) {
@@ -65,6 +69,9 @@ export function notExcluded(excludedTagOptions: TagOptions) {
         includedTags.push(tag);
       }
     }
-    return includedTags.length > 0;
+    return (
+      (filterType === "all" && includedTags.length === item.tags.length) ||
+      (filterType === "any" && includedTags.length > 0)
+    );
   };
 }

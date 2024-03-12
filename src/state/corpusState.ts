@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import {
   collectTagOptions,
+  FilterType,
   ItemTag,
   notExcluded,
   TagOptions,
@@ -19,6 +20,8 @@ export type CorpusState = {
   tagOptions: TagOptions;
   filteredCorpus: CorpusItem[];
   excludedTagOptions: TagOptions;
+  filterType: FilterType;
+  setFilterType(filterType: FilterType): void;
   setCorpus(corpus: CorpusItem[]): void;
   toggleTag(tag: ItemTag): void;
   excludeAll(): void;
@@ -30,6 +33,7 @@ export const useCorpusStore = create<CorpusState>((set) => ({
   filteredCorpus: [],
   tagOptions: {},
   excludedTagOptions: {},
+  filterType: "any",
   setCorpus(corpus: CorpusItem[]) {
     const tagOptions = collectTagOptions(corpus);
     set((state) => ({
@@ -39,13 +43,21 @@ export const useCorpusStore = create<CorpusState>((set) => ({
       tagOptions,
     }));
   },
+  setFilterType(filterType: FilterType) {
+    set((state) => ({
+      ...state,
+      filterType,
+      filteredCorpus: state.corpus.filter(
+        notExcluded(state.excludedTagOptions, filterType),
+      ),
+    }));
+  },
   toggleTag(tag: ItemTag) {
     set((state) => {
       const excludedTagOptions = toggleTag(state.excludedTagOptions, tag);
       const filteredCorpus = state.corpus.filter(
-        notExcluded(excludedTagOptions),
+        notExcluded(excludedTagOptions, state.filterType),
       );
-      console.log(filteredCorpus.length);
       return { ...state, excludedTagOptions, filteredCorpus };
     });
   },

@@ -9,6 +9,8 @@ const Settings = () => {
     (state) => state.excludedTagOptions,
   );
   const toggleTag = useCorpusStore((state) => state.toggleTag);
+  const filterType = useCorpusStore((state) => state.filterType);
+  const setFilterType = useCorpusStore((state) => state.setFilterType);
 
   return (
     <div className="p-4">
@@ -24,6 +26,21 @@ const Settings = () => {
       >
         Include All
       </button>
+      <div className="font-bold text-xl mb-2 mt-4">Match:</div>
+      <div className="flex gap-2 w-full mt-2">
+        <button
+          className={`p-3 bg-neutral-200 grow rounded ${filterType === "any" ? "font-bold" : "bg-neutral-100"}`}
+          onClick={() => setFilterType("any")}
+        >
+          Any
+        </button>
+        <button
+          className={`p-3 bg-neutral-200 grow rounded ${filterType === "all" ? "font-bold" : "bg-neutral-100"}`}
+          onClick={() => setFilterType("all")}
+        >
+          All
+        </button>
+      </div>
       {Object.entries(tagOptions).map(([key, values]) => (
         <div className="mt-4" key={key}>
           <div className="font-bold text-xl mb-4">{key}</div>
