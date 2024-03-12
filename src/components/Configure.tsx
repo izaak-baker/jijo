@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { CorpusItem, useCorpusStore } from "../state/corpusState.ts";
-import { itemTag } from "../utils/tags.ts";
+import { ItemTag, itemTag } from "../utils/tags.ts";
 
 const Configure = () => {
   const [googleLoggedIn, setGoogleLoggedIn] = useState<boolean>(false);
@@ -35,13 +35,13 @@ const Configure = () => {
         if (!range || !range.values || range.values.length === 0) {
           continue;
         }
-        let lessonValue;
-        let subjectValue;
+        const activeTags: { [key: string]: string } = {};
         for (const row of range.values) {
           if (row.length === 0) continue;
-          const tags = [];
-          if (lessonValue) tags.push(itemTag(lessonValue, "Lesson"));
-          if (subjectValue) tags.push(itemTag(subjectValue, "Subject"));
+          const tags: ItemTag[] = [];
+          Object.entries(activeTags).forEach(([key, value]) => {
+            tags.push(itemTag(value, key));
+          });
           if (row[2]) {
             items.push({
               target: row[0].split(""),
@@ -49,10 +49,9 @@ const Configure = () => {
               native: [row[2]],
               tags,
             });
-          } else if (row[0].startsWith("Lesson")) {
-            lessonValue = row[0].split(": ")[1];
           } else {
-            subjectValue = row[0];
+            const [key, value] = row[0].split("=");
+            activeTags[key] = value;
           }
         }
       }
