@@ -1,45 +1,30 @@
 import { CorpusItem } from "../state/corpusState.ts";
 import { FC, useMemo } from "react";
-import { useDisplayStore } from "../state/displayState.ts";
+import { useGameStore } from "../state/gameState.ts";
+import { zip } from "../utils/rendering.ts";
+import Character from "./Character.tsx";
 
 type Props = {
   item: CorpusItem;
 };
 
 const CorpusItemCard: FC<Props> = ({ item }) => {
-  const display = useDisplayStore((state) => state.display);
-
-  const zipped = useMemo(() => {
-    const { target, romanization } = item;
-    const result = [];
-    for (let i = 0; i < target.length; i++) {
-      const element = [target[i]];
-      if (i < romanization.length) {
-        element.push(romanization[i]);
-      } else {
-        element.push("");
-      }
-      result.push(element);
-    }
-    return result;
-  }, [item]);
+  const display = useGameStore((state) => state.display);
+  const zipped = useMemo(() => zip(item), [item]);
 
   return (
     <div className="flex flex-col gap-2 items-center">
       <div className="flex items-center gap-2 max-w-fit">
-        {zipped.map(([targetElement, romanElement]) => (
-          <div className="flex flex-col items-center gap-2">
-            <div
-              className={`text-6xl ${!display.target ? "text-transparent" : ""}`}
-            >
-              {targetElement}
-            </div>
-            <div
-              className={`font-mono ${!display.target && display.romanized ? "text-lg" : "text-sm"} ${!display.romanized ? "text-transparent" : ""}`}
-            >
-              {romanElement}
-            </div>
-          </div>
+        {zipped.map(([targetElement, romanElement], index) => (
+          <Character
+            key={index}
+            index={index}
+            scale="large"
+            displayTarget={display.target}
+            displayRomanized={display.romanized}
+            targetElement={targetElement}
+            romanElement={romanElement}
+          />
         ))}
       </div>
       <div
