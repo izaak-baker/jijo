@@ -20,7 +20,7 @@ const SessionHistoryEntryRow: FC<Props> = ({ index, entry }) => {
   return (
     <div key={index} className="p-4 flex items-center">
       <div
-        className={`w-8 h-8 rounded-full mr-4 ${BULLET_COLORS[entry.outcome]}`}
+        className={`w-8 h-8 rounded-full shrink-0 mr-4 ${BULLET_COLORS[entry.outcome]}`}
       />
       <div>
         <div className={!entry.display.target ? "opacity-25" : ""}>
