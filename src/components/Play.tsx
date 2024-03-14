@@ -5,6 +5,7 @@ import { useCorpusStore } from "../state/corpusState.ts";
 import { FlashcardOutcome, useGameStore } from "../state/gameState.ts";
 import { useCallback } from "react";
 import CorpusItemCard from "./CorpusItemCard.tsx";
+import FooterButton from "./FooterButton.tsx";
 
 const Play = () => {
   const corpus = useCorpusStore((state) => state.corpus);
@@ -91,28 +92,24 @@ const Play = () => {
         </CircleButton>
       </div>
       <div className="flex">
-        <button
-          className="h-16 flex flex-1 items-center pl-4 pr-4 bg-red-200 border-t-red-500 border-t-8 justify-center grow"
+        <FooterButton
+          disposition="danger"
           onClick={() => handleNextButtonClick("incorrect")}
         >
-          <div className="text-red-500 text-2xl font-bold">
-            <FaX />
-          </div>
-        </button>
-        <button
-          className="h-16 flex flex-1 items-center pl-4 pr-4 bg-neutral-200 border-t-neutral-500 border-t-8 justify-center grow"
+          <FaX />
+        </FooterButton>
+        <FooterButton
+          disposition="info"
           onClick={() => handleNextButtonClick("skip")}
         >
-          <div className="text-neutral-500 text-2xl font-bold">SKIP</div>
-        </button>
-        <button
-          className="h-16 flex flex-1 items-center pl-4 pr-4 bg-green-200 border-t-green-500 border-t-8 justify-center grow"
+          SKIP
+        </FooterButton>
+        <FooterButton
+          disposition="success"
           onClick={() => handleNextButtonClick("correct")}
         >
-          <div className="text-green-500 text-2xl font-bold">
-            <FaCheck />
-          </div>
-        </button>
+          <FaCheck />
+        </FooterButton>
       </div>
     </div>
   );

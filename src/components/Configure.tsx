@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { CorpusItem, useCorpusStore } from "../state/corpusState.ts";
 import { ItemTag, itemTag } from "../utils/tags.ts";
+import FooterButton from "./FooterButton.tsx";
 
 const Configure = () => {
   const [googleLoggedIn, setGoogleLoggedIn] = useState<boolean>(false);
@@ -101,11 +102,10 @@ const Configure = () => {
           </>
         )}
       </div>
-      <div
-        className="h-16 flex items-center pl-4 pr-4 bg-red-500 justify-center"
-        onClick={handleResetClick}
-      >
-        <div className="text-white text-2xl font-bold">RESET</div>
+      <div className="grow-0 w-full flex">
+        <FooterButton disposition="danger" onClick={handleResetClick}>
+          RESET
+        </FooterButton>
       </div>
     </div>
   );
