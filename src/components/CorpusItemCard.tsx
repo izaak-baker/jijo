@@ -14,12 +14,12 @@ const CorpusItemCard: FC<Props> = ({ item }) => {
 
   return (
     <div className="flex flex-col gap-2 items-center">
-      <div className="flex items-center gap-2 max-w-fit">
+      <div className="flex items-center gap-2 max-w-[100vw] flex-wrap justify-center">
         {zipped.map(([targetElement, romanElement], index) => (
           <Character
             key={index}
             index={index}
-            scale="large"
+            scale={zipped.length > 5 ? "small" : "large"}
             displayTarget={display.target}
             displayRomanized={display.romanized}
             targetElement={targetElement}
@@ -28,7 +28,7 @@ const CorpusItemCard: FC<Props> = ({ item }) => {
         ))}
       </div>
       <div
-        className={`text-amber-600 mt-4 text-3xl font-serif ${!display.native ? "text-transparent" : ""}`}
+        className={`text-amber-600 text-center mt-4 ${item.native.join().length > 20 ? "text-xl" : "text-3xl"} font-serif ${!display.native ? "text-transparent" : ""}`}
       >
         {item.native}
       </div>
