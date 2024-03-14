@@ -1,24 +1,37 @@
 import CircleButton from "./CircleButton.tsx";
 import { RxLetterCaseCapitalize } from "react-icons/rx";
-import { FaAnglesLeft, FaHashtag } from "react-icons/fa6";
-import { useDisplayStore } from "../state/displayState.ts";
+import { FaAnglesLeft, FaHashtag, FaCheck, FaX } from "react-icons/fa6";
 import { useCorpusStore } from "../state/corpusState.ts";
-import { useGameStore } from "../state/gameState.ts";
+import { FlashcardOutcome, useGameStore } from "../state/gameState.ts";
 import { useCallback } from "react";
 import CorpusItemCard from "./CorpusItemCard.tsx";
 
 const Play = () => {
-  const display = useDisplayStore((state) => state.display);
   const corpus = useCorpusStore((state) => state.corpus);
   const filteredCorpus = useCorpusStore((state) => state.filteredCorpus);
   const chosenItem = useGameStore((state) => state.chosenItem);
-  const toggleDisplay = useDisplayStore((state) => state.toggleDisplay);
+  const toggleDisplay = useGameStore((state) => state.toggleDisplay);
+  const stageHistoryEntry = useGameStore((state) => state.stageHistoryEntry);
+  const recordHistoryEntry = useGameStore((state) => state.recordHistoryEntry);
+  const display = useGameStore((state) => state.display);
   const setChosenItem = useGameStore((state) => state.setChosenItem);
 
-  const handleNextButtonClick = useCallback(() => {
-    const indexChosen = Math.floor(Math.random() * filteredCorpus.length);
-    setChosenItem(filteredCorpus[indexChosen]);
-  }, [setChosenItem, filteredCorpus]);
+  const handleNextButtonClick = useCallback(
+    (outcome: FlashcardOutcome) => {
+      const indexChosen = Math.floor(Math.random() * filteredCorpus.length);
+      const item = filteredCorpus[indexChosen];
+      setChosenItem(item);
+      recordHistoryEntry(outcome);
+      stageHistoryEntry({ display, item });
+    },
+    [
+      setChosenItem,
+      filteredCorpus,
+      display,
+      recordHistoryEntry,
+      stageHistoryEntry,
+    ],
+  );
 
   return (
     <div className="flex flex-col items-stretch h-full">
@@ -77,11 +90,29 @@ const Play = () => {
           <FaHashtag />
         </CircleButton>
       </div>
-      <div
-        className="h-16 flex items-center pl-4 pr-4 bg-violet-500 justify-center"
-        onClick={handleNextButtonClick}
-      >
-        <div className="text-white text-2xl font-bold">NEXT</div>
+      <div className="flex">
+        <button
+          className="h-16 flex flex-1 items-center pl-4 pr-4 bg-red-200 border-t-red-500 border-t-8 justify-center grow"
+          onClick={() => handleNextButtonClick("incorrect")}
+        >
+          <div className="text-red-500 text-2xl font-bold">
+            <FaX />
+          </div>
+        </button>
+        <button
+          className="h-16 flex flex-1 items-center pl-4 pr-4 bg-neutral-200 border-t-neutral-500 border-t-8 justify-center grow"
+          onClick={() => handleNextButtonClick("skip")}
+        >
+          <div className="text-neutral-500 text-2xl font-bold">SKIP</div>
+        </button>
+        <button
+          className="h-16 flex flex-1 items-center pl-4 pr-4 bg-green-200 border-t-green-500 border-t-8 justify-center grow"
+          onClick={() => handleNextButtonClick("correct")}
+        >
+          <div className="text-green-500 text-2xl font-bold">
+            <FaCheck />
+          </div>
+        </button>
       </div>
     </div>
   );

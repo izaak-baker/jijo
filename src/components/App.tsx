@@ -1,9 +1,11 @@
 import { FaGear, FaDatabase, FaPlay, FaCircleQuestion } from "react-icons/fa6";
+import { GrScorecard } from "react-icons/gr";
 import { Link, Route, Switch, useLocation } from "wouter";
 import Configure from "./Configure.tsx";
 import Docs from "./Docs.tsx";
 import Settings from "./Settings.tsx";
 import Play from "./Play.tsx";
+import History from "./History.tsx";
 
 const ICON_SIZE = 24;
 
@@ -19,6 +21,12 @@ const App = () => {
             <FaPlay
               size={ICON_SIZE}
               className={location === "/" ? "text-white" : ""}
+            />
+          </Link>
+          <Link to="/history">
+            <GrScorecard
+              size={ICON_SIZE}
+              className={location === "/log" ? "text-white" : ""}
             />
           </Link>
           <Link to="/settings">
@@ -46,6 +54,7 @@ const App = () => {
           <Route path="/configure" component={Configure} />
           <Route path="/docs" component={Docs} />
           <Route path="/settings" component={Settings} />
+          <Route path="/history" component={History} />
           <Route component={Play} />
         </Switch>
       </div>
