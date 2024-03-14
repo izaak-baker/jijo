@@ -12,13 +12,32 @@ type Props = {
 } & { [key: string]: any };
 
 const FooterButton: FC<Props> = ({ children, disposition, ...leftOver }) => {
-  const color = COLOR_PALETTE[disposition];
+  let bgColor;
+  let fgColor;
+  let txColor;
+  switch (disposition) {
+    case "success":
+      bgColor = "bg-green-200";
+      fgColor = "border-t-green-500";
+      txColor = "text-green-500";
+      break;
+    case "info":
+      bgColor = "bg-neutral-200";
+      fgColor = "border-t-neutral-500";
+      txColor = "text-neutral-500";
+      break;
+    case "danger":
+      bgColor = "bg-red-200";
+      fgColor = "border-t-red-500";
+      txColor = "text-red-500";
+      break;
+  }
   return (
     <button
-      className={`h-16 flex flex-1 items-center pl-4 pr-4 bg-${color}-200 border-t-${color}-500 border-t-8 justify-center grow`}
+      className={`h-16 flex flex-1 items-center pl-4 pr-4 ${bgColor} ${fgColor} border-t-8 justify-center grow`}
       {...leftOver}
     >
-      <div className={`text-${color}-500 text-2xl font-bold`}>{children}</div>
+      <div className={`${txColor} text-2xl font-bold`}>{children}</div>
     </button>
   );
 };
