@@ -23,20 +23,20 @@ const SessionHistoryEntryRow: FC<Props> = ({ index, entry }) => {
         className={`w-8 h-8 rounded-full shrink-0 mr-4 ${BULLET_COLORS[entry.outcome]}`}
       />
       <div>
-        <div className={!entry.display.target ? "opacity-25" : ""}>
-          <div className="flex gap-2">
-            {zipped.map(([target, roman], index) => (
-              <Character
-                key={index}
-                index={index}
-                scale="small"
-                displayTarget
-                displayRomanized
-                targetElement={target}
-                romanElement={roman}
-              />
-            ))}
-          </div>
+        <div className="flex gap-2">
+          {zipped.map(([target, roman], index) => (
+            <Character
+              key={index}
+              index={index}
+              scale="small"
+              displayTarget
+              fadeTarget={!entry.display.target}
+              displayRomanized
+              fadeRomanized={!entry.display.romanized}
+              targetElement={target}
+              romanElement={roman}
+            />
+          ))}
         </div>
         <div className={!entry.display.native ? "opacity-25" : ""}>
           <div className="text-amber-600 font-serif">

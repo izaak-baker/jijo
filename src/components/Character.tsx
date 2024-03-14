@@ -4,7 +4,9 @@ type Props = {
   index: number;
   scale: "large" | "small";
   displayTarget: boolean;
+  fadeTarget?: boolean;
   displayRomanized: boolean;
+  fadeRomanized?: boolean;
   targetElement: string;
   romanElement: string;
 };
@@ -13,7 +15,9 @@ const Character: FC<Props> = ({
   index,
   scale,
   displayTarget,
+  fadeTarget = false,
   displayRomanized,
+  fadeRomanized = false,
   targetElement,
   romanElement,
 }) => {
@@ -38,12 +42,12 @@ const Character: FC<Props> = ({
   return (
     <div key={index} className={`flex flex-col items-center ${sizes.gap}`}>
       <div
-        className={`${sizes.target} ${!displayTarget ? "text-transparent" : ""}`}
+        className={`${sizes.target} ${!displayTarget ? "text-transparent" : ""} ${fadeTarget ? "opacity-25" : ""}`}
       >
         {targetElement}
       </div>
       <div
-        className={`font-mono ${sizes.romanized} ${!displayRomanized ? "text-transparent" : ""}`}
+        className={`font-mono ${sizes.romanized} ${!displayRomanized ? "text-transparent" : ""} ${fadeRomanized ? "opacity-25" : ""}`}
       >
         {romanElement}
       </div>
