@@ -26,7 +26,7 @@ const App = () => {
           <Link to="/history">
             <GrScorecard
               size={ICON_SIZE}
-              className={location === "/log" ? "text-white" : ""}
+              className={location === "/history" ? "text-white" : ""}
             />
           </Link>
           <Link to="/settings">
