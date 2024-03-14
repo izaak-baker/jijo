@@ -18,10 +18,7 @@ const SessionHistoryEntryRow: FC<Props> = ({ index, entry }) => {
   const zipped = useMemo(() => zip(entry.item), [entry]);
 
   return (
-    <div
-      key={index}
-      className={`p-4 flex items-center ${index % 2 === 0 ? "bg-neutral-100" : "bg-white"}`}
-    >
+    <div key={index} className="p-4 flex items-center">
       <div
         className={`w-8 h-8 rounded-full mr-4 ${BULLET_COLORS[entry.outcome]}`}
       />
