@@ -12,7 +12,7 @@ const History = () => {
 
   return (
     <div className="flex flex-col items-stretch h-full">
-      <div className="overflow-y-scroll grow-1 flex flex-col-reverse">
+      <div className="overflow-y-scroll grow-1 flex flex-col-reverse overflow-x-hidden">
         {sessionHistory.map((entry, index) => (
           <div
             key={index}
