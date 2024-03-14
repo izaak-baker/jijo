@@ -1,11 +1,5 @@
 import { FC, ReactNode } from "react";
 
-const COLOR_PALETTE = {
-  success: "green",
-  info: "neutral",
-  danger: "red",
-};
-
 type Props = {
   children: ReactNode;
   disposition: "success" | "info" | "danger";
