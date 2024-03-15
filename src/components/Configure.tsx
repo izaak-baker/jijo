@@ -67,7 +67,7 @@ const Configure = () => {
   }, [loadSources, newSourceName, newSourceSpreadsheetId]);
 
   const bgColor = useMemo(
-    () => (corpus.length > 0 ? "bg-green-400" : "bg-neutral-200"),
+    () => (corpus.length > 0 ? "bg-violet-400" : "bg-neutral-200"),
     [corpus],
   );
 
