@@ -1,6 +1,6 @@
 import { CorpusItem } from "../state/corpusState.ts";
 
-export const STRING_TAG_KEY = "_";
+export const STRING_TAG_KEY = "#";
 export type FilterType = "all" | "any";
 export type TagOptions = { [key: string]: Set<string> };
 export type ItemTag =
