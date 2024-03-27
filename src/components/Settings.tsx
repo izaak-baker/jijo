@@ -5,9 +5,7 @@ const Settings = () => {
   const tagOptions = useCorpusStore((state) => state.tagOptions);
   const excludeAll = useCorpusStore((state) => state.excludeAll);
   const includeAll = useCorpusStore((state) => state.includeAll);
-  const excludedTagOptions = useCorpusStore(
-    (state) => state.excludedTagOptions,
-  );
+  const activeTagOptions = useCorpusStore((state) => state.activeTagOptions);
   const toggleTag = useCorpusStore((state) => state.toggleTag);
   const filterType = useCorpusStore((state) => state.filterType);
   const setFilterType = useCorpusStore((state) => state.setFilterType);
@@ -46,9 +44,9 @@ const Settings = () => {
           <div className="font-bold text-xl mb-4">{key}</div>
           <div className="pl-2">
             {[...values].map((value) => {
-              const format: string = excludedTagOptions[key]?.has(value)
-                ? "text-neutral-400"
-                : "font-bold text-violet-500";
+              const format: string = activeTagOptions[key]?.has(value)
+                ? "font-bold text-violet-500"
+                : "text-neutral-400";
               const className = `text-wrap p-1 ${format}`;
               return (
                 <div
