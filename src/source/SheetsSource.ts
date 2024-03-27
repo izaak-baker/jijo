@@ -19,7 +19,7 @@ export class SheetsSource {
     );
 
     // Find any tabs with "Vocab" in the name.
-    const sheetNames = spreadsheetResponse?.result?.sheets
+    const sheetNames = spreadsheetResponse.result.sheets
       ?.map((sheet: any) => sheet.properties.title)
       ?.filter((title: string) => title.includes("Vocab"));
     if (!sheetNames) return [];
