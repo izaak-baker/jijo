@@ -31,7 +31,7 @@ export class SheetsSource {
         async () =>
           await window.getSpreadsheetValues(
             this.config.spreadsheetId,
-            `${sheetName}!A:C`,
+            `${sheetName}!A:D`,
           ),
       );
       const range = valuesResponse.result;
@@ -45,6 +45,16 @@ export class SheetsSource {
         Object.entries(activeTags).forEach(([key, value]) => {
           tags.push(itemTag(value, key));
         });
+        if (row[3]) {
+          for (const source of row[3].split(",")) {
+            if (source.includes("=")) {
+              const [key, value] = source.split("=");
+              tags.push(itemTag(value, key));
+            } else {
+              tags.push(itemTag(source));
+            }
+          }
+        }
         if (row[2]) {
           items.push({
             target: row[0].split(""),
