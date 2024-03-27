@@ -53,25 +53,42 @@ export function itemTag(value: string, key?: string): ItemTag {
   return value;
 }
 
-export function notExcluded(
-  excludedTagOptions: TagOptions,
+export function itemIsIncluded(
+  activeTagOptions: TagOptions,
   filterType: FilterType,
 ) {
   return (item: CorpusItem) => {
-    const includedTags = [];
-    for (const tag of item.tags) {
-      const key = tagKey(tag);
-      const value = tagValue(tag);
-      const tagIsExcluded =
-        Object.hasOwn(excludedTagOptions, key) &&
-        excludedTagOptions[key].has(value);
-      if (!tagIsExcluded) {
-        includedTags.push(tag);
-      }
+    switch (filterType) {
+      case "any":
+        for (const [activeTagKey, activeTagValues] of Object.entries(
+          activeTagOptions,
+        )) {
+          for (const tag of item.tags) {
+            const itemTagKey = tagKey(tag);
+            const itemTagValue = tagValue(tag);
+            if (
+              itemTagKey === activeTagKey &&
+              activeTagValues.has(itemTagValue)
+            ) {
+              return true;
+            }
+          }
+        }
+        return false;
+      case "all":
+        return Object.entries(activeTagOptions).every(
+          ([activeTagKey, activeTagValues]) => {
+            const unmatchedTagValues = structuredClone(activeTagValues);
+            for (const tag of item.tags) {
+              const itemTagKey = tagKey(tag);
+              const itemTagValue = tagValue(tag);
+              if (itemTagKey === activeTagKey) {
+                unmatchedTagValues.delete(itemTagValue);
+              }
+            }
+            return unmatchedTagValues.size === 0;
+          },
+        );
     }
-    return (
-      (filterType === "all" && includedTags.length === item.tags.length) ||
-      (filterType === "any" && includedTags.length > 0)
-    );
   };
 }

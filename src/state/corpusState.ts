@@ -3,7 +3,7 @@ import {
   collectTagOptions,
   FilterType,
   ItemTag,
-  notExcluded,
+  itemIsIncluded,
   TagOptions,
   toggleTag,
 } from "../utils/tags.ts";
@@ -19,7 +19,7 @@ export type CorpusState = {
   corpus: CorpusItem[];
   tagOptions: TagOptions;
   filteredCorpus: CorpusItem[];
-  excludedTagOptions: TagOptions;
+  activeTagOptions: TagOptions;
   filterType: FilterType;
   setFilterType(filterType: FilterType): void;
   setCorpus(corpus: CorpusItem[]): void;
@@ -32,7 +32,7 @@ export const useCorpusStore = create<CorpusState>((set) => ({
   corpus: [],
   filteredCorpus: [],
   tagOptions: {},
-  excludedTagOptions: {},
+  activeTagOptions: {},
   filterType: "any",
   setCorpus(corpus: CorpusItem[]) {
     const tagOptions = collectTagOptions(corpus);
@@ -41,6 +41,7 @@ export const useCorpusStore = create<CorpusState>((set) => ({
       corpus,
       filteredCorpus: corpus,
       tagOptions,
+      activeTagOptions: structuredClone(tagOptions),
     }));
   },
   setFilterType(filterType: FilterType) {
@@ -48,31 +49,31 @@ export const useCorpusStore = create<CorpusState>((set) => ({
       ...state,
       filterType,
       filteredCorpus: state.corpus.filter(
-        notExcluded(state.excludedTagOptions, filterType),
+        itemIsIncluded(state.activeTagOptions, filterType),
       ),
     }));
   },
   toggleTag(tag: ItemTag) {
     set((state) => {
-      const excludedTagOptions = toggleTag(state.excludedTagOptions, tag);
+      const activeTagOptions = toggleTag(state.activeTagOptions, tag);
       const filteredCorpus = state.corpus.filter(
-        notExcluded(excludedTagOptions, state.filterType),
+        itemIsIncluded(activeTagOptions, state.filterType),
       );
-      return { ...state, excludedTagOptions, filteredCorpus };
+      return { ...state, activeTagOptions: activeTagOptions, filteredCorpus };
     });
   },
   excludeAll() {
     set((state) => ({
       ...state,
       filteredCorpus: [],
-      excludedTagOptions: structuredClone(state.tagOptions),
+      activeTagOptions: {},
     }));
   },
   includeAll() {
     set((state) => ({
       ...state,
       filteredCorpus: structuredClone(state.corpus),
-      excludedTagOptions: {},
+      activeTagOptions: structuredClone(state.tagOptions),
     }));
   },
 }));
