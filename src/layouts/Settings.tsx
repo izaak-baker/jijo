@@ -1,5 +1,5 @@
 import { useCorpusStore } from "../state/corpusState.ts";
-import { itemTag } from "../utils/tags.ts";
+import { itemTag } from "../logic/tags.ts";
 
 const Settings = () => {
   const tagOptions = useCorpusStore((state) => state.tagOptions);

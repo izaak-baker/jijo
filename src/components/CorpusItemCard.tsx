@@ -1,7 +1,7 @@
 import { CorpusItem } from "../state/corpusState.ts";
 import { FC, useMemo } from "react";
 import { useGameStore } from "../state/gameState.ts";
-import { zip } from "../utils/rendering.ts";
+import { zip } from "../logic/rendering.ts";
 import Character from "./Character.tsx";
 
 type Props = {

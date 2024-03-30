@@ -6,7 +6,7 @@ import {
   itemIsIncluded,
   TagOptions,
   toggleTag,
-} from "../utils/tags.ts";
+} from "../logic/tags.ts";
 
 export type CorpusItem = {
   target: string[];
