@@ -1,11 +1,11 @@
-import CircleButton from "./CircleButton.tsx";
+import CircleButton from "../components/CircleButton.tsx";
 import { RxLetterCaseCapitalize } from "react-icons/rx";
 import { FaAnglesLeft, FaHashtag, FaCheck, FaX } from "react-icons/fa6";
 import { useCorpusStore } from "../state/corpusState.ts";
 import { FlashcardOutcome, useGameStore } from "../state/gameState.ts";
 import { useCallback } from "react";
-import CorpusItemCard from "./CorpusItemCard.tsx";
-import FooterButton from "./FooterButton.tsx";
+import CorpusItemCard from "../components/CorpusItemCard.tsx";
+import FooterButton from "../components/FooterButton.tsx";
 
 const Play = () => {
   const corpus = useCorpusStore((state) => state.corpus);

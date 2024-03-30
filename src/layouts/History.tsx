@@ -1,5 +1,5 @@
 import { useGameStore } from "../state/gameState.ts";
-import SessionHistoryEntryRow from "./SessionHistoryEntryRow.tsx";
+import SessionHistoryEntryRow from "../components/SessionHistoryEntryRow.tsx";
 import { useMemo } from "react";
 
 const History = () => {

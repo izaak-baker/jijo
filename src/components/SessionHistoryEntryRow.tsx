@@ -1,6 +1,6 @@
 import { SessionHistoryEntry } from "../state/gameState.ts";
 import { FC, useMemo } from "react";
-import { zip } from "../utils/rendering.ts";
+import { zip } from "../logic/rendering.ts";
 import Character from "./Character.tsx";
 
 const BULLET_COLORS: { [key: string]: string } = {

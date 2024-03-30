@@ -96,7 +96,7 @@ const Configure = () => {
   return (
     <div className="h-full flex flex-col">
       <div
-        className={`w-full flex items-center text-lg justify-center h-12 ${bgColor}`}
+        className={`w-full flex items-center text-lg shrink-0 justify-center h-12 ${bgColor}`}
       >
         {message}
       </div>

@@ -1,5 +1,5 @@
 import { CorpusItem } from "../state/corpusState.ts";
-import { itemTag, ItemTag } from "../utils/tags.ts";
+import { itemTag, ItemTag } from "../logic/tags.ts";
 import { AbstractSource } from "./AbstractSource.ts";
 
 export class SheetsSource extends AbstractSource {

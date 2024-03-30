@@ -1,4 +1,4 @@
-import { SourceConfig } from "../utils/rxdb.ts";
+import { SourceConfig } from "../logic/rxdb.ts";
 import { CorpusItem } from "../state/corpusState.ts";
 
 export abstract class AbstractSource {

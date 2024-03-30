@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./components/App.tsx";
+import App from "./layouts/App.tsx";
 import { addRxPlugin } from "rxdb";
-import {setupDb} from "./utils/rxdb.ts";
+import {setupDb} from "./logic/rxdb.ts";
 import { RxDBMigrationPlugin } from 'rxdb/plugins/migration-schema';
 
 
