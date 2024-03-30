@@ -2,7 +2,7 @@ import { AbstractSource } from "./AbstractSource.ts";
 import { CorpusItem } from "../state/corpusState.ts";
 
 export const CORPUS_ITEM_REGEX =
-  /\s?(?<target>\S+)\s\((?<romanization>([a-z]+[0-9]\s?)+)\s“(?<native>[a-z\s]+)”\)/g;
+  /\s?(?<target>\S+)\s\((?<romanization>([a-z]+[0-9]\s?)+)\s“(?<native>[a-zA-Z\-\s,]+)”\)/g;
 export const TARGET_EXCEPTIONS = ["hea"];
 
 export class DiarySource extends AbstractSource {
@@ -21,6 +21,7 @@ export class DiarySource extends AbstractSource {
     const corpusItemMatches = documentText.matchAll(CORPUS_ITEM_REGEX);
     const items: CorpusItem[] = [];
     for (const { groups } of corpusItemMatches) {
+      console.log(groups);
       if (
         !groups ||
         !["target", "romanization", "native"].every((k) =>
