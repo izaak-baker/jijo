@@ -4,6 +4,8 @@ import "./index.css";
 import App from "./components/App.tsx";
 import { addRxPlugin } from "rxdb";
 import {setupDb} from "./utils/rxdb.ts";
+import { RxDBMigrationPlugin } from 'rxdb/plugins/migration-schema';
+
 
 // Insurance
 (window as any).global = window;
@@ -11,8 +13,8 @@ import {setupDb} from "./utils/rxdb.ts";
   env: { DEBUG: undefined },
 };
 
-// RxDB Dev mode plugin
 const RXDB_NAME = "jijo";
+addRxPlugin(RxDBMigrationPlugin);
 if (import.meta.env.DEV) {
   await import("rxdb/plugins/dev-mode").then((module) =>
     addRxPlugin(module.RxDBDevModePlugin),

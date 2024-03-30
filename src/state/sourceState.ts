@@ -1,21 +1,21 @@
-import { SheetsSource } from "../source/SheetsSource.ts";
+import { AbstractSource } from "../source/AbstractSource.ts";
 import { create } from "zustand";
 
 export type SourceState = {
-  sources: SheetsSource[];
-  setSources(sources: SheetsSource[]): void;
-  addSource(source: SheetsSource): void;
+  sources: AbstractSource[];
+  setSources(sources: AbstractSource[]): void;
+  addSource(source: AbstractSource): void;
 };
 
 export const useSourceStore = create<SourceState>((set) => ({
   sources: [],
-  setSources(sources: SheetsSource[]) {
+  setSources(sources: AbstractSource[]) {
     set((state) => ({
       ...state,
       sources,
     }));
   },
-  addSource(source: SheetsSource) {
+  addSource(source: AbstractSource) {
     set((state) => {
       const sources = [...state.sources, source];
       return {
