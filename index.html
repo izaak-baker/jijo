@@ -14,8 +14,11 @@
     <script type="text/javascript">
       const CLIENT_ID = '1028113456064-ibumc17hdduobhp89cjhjldfll0v88gs.apps.googleusercontent.com';
       const API_KEY = 'AIzaSyDdtqJQzT4L0s_GwFH89WaXyZNpGLO7mFQ';
-      const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
-      const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly';
+      const DISCOVERY_DOCS = [
+        'https://sheets.googleapis.com/$discovery/rest?version=v4',
+        'https://docs.googleapis.com/$discovery/rest?version=v1'
+      ];
+      const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/documents.readonly';
       const ACCESS_TOKEN_LS_KEY = 'gapi_access_token';
 
       let tokenClient;
@@ -36,7 +39,7 @@
       async function initializeGapiClient() {
         await gapi.client.init({
           apiKey: API_KEY,
-          discoveryDocs: [DISCOVERY_DOC],
+          discoveryDocs: DISCOVERY_DOCS,
         });
         gapiInited = true;
       }
@@ -99,6 +102,10 @@
 
       function getSpreadsheetValues(spreadsheetId, range) {
         return gapi.client.sheets.spreadsheets.values.get({ spreadsheetId, range })
+      }
+
+      function getGoogleDoc(documentId) {
+        return gapi.client.docs.documents.get({ documentId });
       }
     </script>
     <script type="module" src="/src/main.tsx"></script>

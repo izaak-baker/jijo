@@ -1,10 +1,11 @@
 import { createRxDatabase, RxDatabase } from "rxdb";
 import { getRxStorageDexie } from "rxdb/plugins/storage-dexie";
 
-export type SheetsSourceConfig = {
+export type SourceConfig = {
   id: string;
   name: string;
-  spreadsheetId: string;
+  sourceType: string;
+  documentId: string;
 };
 
 export async function setupDb(dbName: string): Promise<RxDatabase> {
@@ -14,8 +15,8 @@ export async function setupDb(dbName: string): Promise<RxDatabase> {
     ignoreDuplicate: true,
   });
 
-  const sheetsSourceSchema = {
-    version: 0,
+  const sourceSchema = {
+    version: 1,
     primaryKey: "id",
     type: "object",
     properties: {
@@ -26,16 +27,28 @@ export async function setupDb(dbName: string): Promise<RxDatabase> {
       name: {
         type: "string",
       },
-      spreadsheetId: {
+      sourceType: {
+        type: "string",
+      },
+      documentId: {
         type: "string",
       },
     },
-    required: ["id", "name", "spreadsheetId"],
+    required: ["id", "name", "sourceType", "documentId"],
   };
 
   await clientRxdb.addCollections({
     sources: {
-      schema: sheetsSourceSchema,
+      schema: sourceSchema,
+      migrationStrategies: {
+        1: (v0) => {
+          const v1 = structuredClone(v0);
+          v1.documentId = v1.spreadsheetId;
+          delete v1.spreadsheetId;
+          v1.sourceType = "SheetsSource";
+          return v1;
+        },
+      },
     },
   });
 

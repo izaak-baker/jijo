@@ -1,21 +1,11 @@
 import { CorpusItem } from "../state/corpusState.ts";
 import { itemTag, ItemTag } from "../utils/tags.ts";
-import { SheetsSourceConfig } from "../utils/rxdb.ts";
+import { AbstractSource } from "./AbstractSource.ts";
 
-export class SheetsSource {
-  constructor(private config: SheetsSourceConfig) {}
-
-  public getName() {
-    return this.config.name;
-  }
-
-  public getId() {
-    return this.config.id;
-  }
-
-  async loadCorpus(): Promise<CorpusItem[]> {
-    const spreadsheetResponse = await this.performSheetsOperation(
-      async () => await window.getGoogleSpreadsheet(this.config.spreadsheetId),
+export class SheetsSource extends AbstractSource {
+  public async loadCorpus(): Promise<CorpusItem[]> {
+    const spreadsheetResponse = await this.performGoogleOperation(
+      async () => await window.getGoogleSpreadsheet(this.config.documentId),
     );
 
     // Find any tabs with "Vocab" in the name.
@@ -27,10 +17,10 @@ export class SheetsSource {
     // Loop rows, collecting corpus items.
     const items: CorpusItem[] = [];
     for (const sheetName of sheetNames) {
-      const valuesResponse = await this.performSheetsOperation(
+      const valuesResponse = await this.performGoogleOperation(
         async () =>
           await window.getSpreadsheetValues(
-            this.config.spreadsheetId,
+            this.config.documentId,
             `${sheetName}!A:D`,
           ),
       );
@@ -71,27 +61,5 @@ export class SheetsSource {
 
     // Done!
     return items;
-  }
-
-  private async performSheetsOperation<T>(operation: () => T): Promise<T> {
-    if (!window.gapiClientHasToken()) {
-      const storedToken = window.getStoredGapiClientToken();
-      if (!storedToken) {
-        await window.googleLogin();
-        return this.performSheetsOperation(operation);
-      }
-      window.setGapiClientToken(storedToken);
-    }
-
-    let response: T;
-    try {
-      response = await operation();
-    } catch (e) {
-      console.error(e);
-      window.googleLogout();
-      return this.performSheetsOperation(operation);
-    }
-
-    return response;
   }
 }

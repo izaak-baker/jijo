@@ -14,6 +14,23 @@ type SpreadsheetValuesResponse = {
   }
 }
 
+type DocResponse = {
+  result: {
+    title: string;
+    body: {
+      content: {
+        paragraph?: {
+          elements: {
+            textRun: {
+              content: string;
+            }
+          }[];
+        }
+      }[];
+    }
+  }
+}
+
 interface Window {
   googleLogin(): Promise<void>;
   googleLogout(): void;
@@ -22,4 +39,5 @@ interface Window {
   getStoredGapiClientToken(): string;
   getGoogleSpreadsheet(spreadsheetId: string): Promise<SpreadsheetResponse>;
   getSpreadsheetValues(spreadsheetId: string, range: string): Promise<SpreadsheetValuesResponse>;
+  getGoogleDoc(documentId: string): Promise<DocResponse>
 }
