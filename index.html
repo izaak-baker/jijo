@@ -12,8 +12,12 @@
   <body>
     <div id="root" class="h-full"></div>
     <script type="text/javascript">
-      const CLIENT_ID = '1028113456064-ibumc17hdduobhp89cjhjldfll0v88gs.apps.googleusercontent.com';
-      const API_KEY = 'AIzaSyDdtqJQzT4L0s_GwFH89WaXyZNpGLO7mFQ';
+      const CLIENT_ID = window.location.host === 'jijo.study'
+        ? '1028113456064-ibumc17hdduobhp89cjhjldfll0v88gs.apps.googleusercontent.com'
+        : '1028693753027-hsuov5dl8blv4g06bpgi3sg5330ort1k.apps.googleusercontent.com'
+      const API_KEY = window.location.host === 'jijo.study'
+        ? 'AIzaSyDdtqJQzT4L0s_GwFH89WaXyZNpGLO7mFQ'
+        : 'AIzaSyCniQ49mcKT9dq_k0-oJsKPVK08BtqODc4';
       const DISCOVERY_DOCS = [
         'https://sheets.googleapis.com/$discovery/rest?version=v4',
         'https://docs.googleapis.com/$discovery/rest?version=v1'
