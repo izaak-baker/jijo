@@ -24,7 +24,7 @@ const SessionHistoryEntryRow: FC<Props> = ({ index, entry }) => {
       />
       <div>
         <div className="flex gap-2">
-          {zipped.map(([target, roman], index) => (
+          {zipped.map(({ targetCharacter, romanizedCharacter }, index) => (
             <Character
               key={index}
               index={index}
@@ -33,8 +33,8 @@ const SessionHistoryEntryRow: FC<Props> = ({ index, entry }) => {
               fadeTarget={!entry.display.target}
               displayRomanized
               fadeRomanized={!entry.display.romanized}
-              targetElement={target}
-              romanElement={roman}
+              targetElement={targetCharacter}
+              romanElement={romanizedCharacter}
             />
           ))}
         </div>

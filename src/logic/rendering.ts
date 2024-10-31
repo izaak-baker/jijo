@@ -1,16 +1,17 @@
 import { CorpusItem } from "../state/corpusState.ts";
 
-export function zip(item: CorpusItem) {
+export type RomanizedCharacter = {
+  targetCharacter: string;
+  romanizedCharacter: string;
+};
+
+export function zip(item: CorpusItem): RomanizedCharacter[] {
   const { target, romanization } = item;
-  const result = [];
-  for (let i = 0; i < target.length; i++) {
-    const element = [target[i]];
-    if (i < romanization.length) {
-      element.push(romanization[i]);
-    } else {
-      element.push("");
-    }
-    result.push(element);
+  const result: RomanizedCharacter[] = [];
+  for (let i = 0; i < Math.max(romanization.length, target.length); i++) {
+    const targetCharacter = target[i];
+    const romanizedCharacter = romanization[i];
+    result.push({ targetCharacter, romanizedCharacter });
   }
   return result;
 }

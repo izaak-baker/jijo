@@ -28,38 +28,58 @@ export class SheetsSource extends AbstractSource {
       if (!range || !range.values || range.values.length === 0) {
         continue;
       }
-      const activeTags: { [key: string]: string } = {};
+      const activeTags: Record<string, string> = {};
       for (const row of range.values) {
-        if (row.length === 0) continue;
-        const tags: ItemTag[] = [];
-        Object.entries(activeTags).forEach(([key, value]) => {
-          tags.push(itemTag(value, key));
-        });
-        if (row[3]) {
-          for (const source of row[3].split(",")) {
-            if (source.includes("=")) {
-              const [key, value] = source.split("=");
-              tags.push(itemTag(value, key));
-            } else {
-              tags.push(itemTag(source));
-            }
-          }
-        }
-        if (row[2]) {
-          items.push({
-            target: row[0].split(""),
-            romanization: row[1].split(/\s+/),
-            native: [row[2]],
-            tags,
-          });
-        } else {
-          const [key, value] = row[0].split("=");
-          activeTags[key] = value;
-        }
+        this.processRow(row, items, activeTags);
       }
     }
 
     // Done!
     return items;
+  }
+
+  private processRow(
+    row: string[],
+    items: CorpusItem[],
+    activeTags: Record<string, string>,
+  ): void {
+    if (row.length === 0) return;
+
+    // Start by collecting any active tags
+    const tags: ItemTag[] = [];
+    Object.entries(activeTags).forEach(([key, value]) => {
+      tags.push(itemTag(value, key));
+    });
+
+    if (row[0].includes("=")) {
+      const [key, value] = row[0].split("=");
+      activeTags[key] = value;
+      return;
+    }
+
+    const [
+      targetSource,
+      romanizationSource,
+      nativeSource,
+      singleItemTagsSource,
+    ] = row;
+
+    if (singleItemTagsSource) {
+      for (const source of singleItemTagsSource.split(",")) {
+        if (source.includes("=")) {
+          const [key, value] = source.split("=");
+          tags.push(itemTag(value, key));
+        } else {
+          tags.push(itemTag(source));
+        }
+      }
+    }
+
+    items.push({
+      target: targetSource?.split("") || [],
+      romanization: romanizationSource?.split(/\s+/) || [],
+      native: nativeSource ? [nativeSource] : [],
+      tags,
+    });
   }
 }
