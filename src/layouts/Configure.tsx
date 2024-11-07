@@ -7,6 +7,7 @@ import { v4 } from "uuid";
 import { DiarySource } from "../source/DiarySource.ts";
 import { AbstractSource } from "../source/AbstractSource.ts";
 import { FaBook, FaTable } from "react-icons/fa";
+import ResponsiveContainer from "../components/ResponsiveContainer.tsx";
 
 const Configure = () => {
   const [loadingCorpus, setLoadingCorpus] = useState<boolean>(false);
@@ -100,72 +101,74 @@ const Configure = () => {
       >
         {message}
       </div>
-      <div className="grow p-4 flex flex-col gap-4">
-        {sources.map((source) => (
-          <div
-            className="border-l-neutral-500 border-l-8 p-4 bg-neutral-200"
-            key={source.getId()}
-          >
-            <div className="text-lg mb-2 flex items-center gap-2">
-              <span className="font-bold">
-                {source.getSourceType() === "SheetsSource" && <FaTable />}
-                {source.getSourceType() === "DiarySource" && <FaBook />}
-              </span>
-              <span className="font-bold">SOURCE</span>
-              {source.getName()}
+      <ResponsiveContainer>
+        <div className="grow p-4 flex flex-col gap-4 sm:min-w-[896px]">
+          {sources.map((source) => (
+            <div
+              className="border-l-neutral-500 border-l-8 p-4 bg-neutral-200"
+              key={source.getId()}
+            >
+              <div className="text-lg mb-2 flex items-center gap-2">
+                <span className="font-bold">
+                  {source.getSourceType() === "SheetsSource" && <FaTable />}
+                  {source.getSourceType() === "DiarySource" && <FaBook />}
+                </span>
+                <span className="font-bold">SOURCE</span>
+                {source.getName()}
+              </div>
+              <div className="flex gap-2 font-bold">
+                <button
+                  className="flex-1 p-2 bg-violet-300 rounded"
+                  onClick={() => loadFromSource(source)}
+                >
+                  Load
+                </button>
+                <button
+                  className="flex-1 p-2 bg-red-300 rounded"
+                  onClick={() => deleteSource(source.getId())}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-            <div className="flex gap-2 font-bold">
+          ))}
+          <div className="border-l-neutral-300 border-l-8 p-4 bg-neutral-100 text-neutral-700">
+            <div className="text-lg mb-2 font-bold">NEW SOURCE</div>
+            <div className="flex w-full mt-2 mb-2 gap-2">
               <button
-                className="flex-1 p-2 bg-violet-300 rounded"
-                onClick={() => loadFromSource(source)}
+                className={`grow p-2 rounded ${newSourceType === "SheetsSource" ? "font-bold bg-neutral-300" : "bg-neutral-200"}`}
+                onClick={() => setNewSourceType("SheetsSource")}
               >
-                Load
+                Sheets Source
               </button>
               <button
-                className="flex-1 p-2 bg-red-300 rounded"
-                onClick={() => deleteSource(source.getId())}
+                className={`grow p-2 rounded ${newSourceType === "DiarySource" ? "font-bold bg-neutral-300" : "bg-neutral-200"}`}
+                onClick={() => setNewSourceType("DiarySource")}
               >
-                Delete
+                Diary Source
               </button>
             </div>
-          </div>
-        ))}
-        <div className="border-l-neutral-300 border-l-8 p-4 bg-neutral-100 text-neutral-700">
-          <div className="text-lg mb-2 font-bold">NEW SOURCE</div>
-          <div className="flex w-full mt-2 mb-2 gap-2">
+            <div>Name:</div>
+            <input
+              value={newSourceName}
+              onChange={(e) => setNewSourceName(e.target.value)}
+              className="w-full h-10 border border-neutral-300 mt-2 p-2"
+            />
+            <div className="mt-2">Document ID:</div>
+            <input
+              value={newSourceDocumentId}
+              onChange={(e) => setNewSourceDocumentId(e.target.value)}
+              className="w-full h-10 border border-neutral-300 mt-2 p-2"
+            />
             <button
-              className={`grow p-2 rounded ${newSourceType === "SheetsSource" ? "font-bold bg-neutral-300" : "bg-neutral-200"}`}
-              onClick={() => setNewSourceType("SheetsSource")}
+              className="w-full p-2 mt-4 bg-green-300 text-black font-bold"
+              onClick={createSource}
             >
-              Sheets Source
-            </button>
-            <button
-              className={`grow p-2 rounded ${newSourceType === "DiarySource" ? "font-bold bg-neutral-300" : "bg-neutral-200"}`}
-              onClick={() => setNewSourceType("DiarySource")}
-            >
-              Diary Source
+              Create
             </button>
           </div>
-          <div>Name:</div>
-          <input
-            value={newSourceName}
-            onChange={(e) => setNewSourceName(e.target.value)}
-            className="w-full h-10 border border-neutral-300 mt-2 p-2"
-          />
-          <div className="mt-2">Document ID:</div>
-          <input
-            value={newSourceDocumentId}
-            onChange={(e) => setNewSourceDocumentId(e.target.value)}
-            className="w-full h-10 border border-neutral-300 mt-2 p-2"
-          />
-          <button
-            className="w-full p-2 mt-4 bg-green-300 text-black font-bold"
-            onClick={createSource}
-          >
-            Create
-          </button>
         </div>
-      </div>
+      </ResponsiveContainer>
     </div>
   );
 };

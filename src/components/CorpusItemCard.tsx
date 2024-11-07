@@ -15,15 +15,15 @@ const CorpusItemCard: FC<Props> = ({ item }) => {
   return (
     <div className="flex flex-col gap-2 items-center">
       <div className="flex items-center gap-2 max-w-[100vw] flex-wrap justify-center">
-        {zipped.map(([targetElement, romanElement], index) => (
+        {zipped.map(({ targetCharacter, romanizedCharacter }, index) => (
           <Character
             key={index}
             index={index}
             scale={zipped.length > 5 ? "small" : "large"}
             displayTarget={display.target}
             displayRomanized={display.romanized}
-            targetElement={targetElement}
-            romanElement={romanElement}
+            targetElement={targetCharacter}
+            romanElement={romanizedCharacter}
           />
         ))}
       </div>
