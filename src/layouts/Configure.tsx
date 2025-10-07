@@ -8,13 +8,20 @@ import { DiarySource } from "../source/DiarySource.ts";
 import { AbstractSource } from "../source/AbstractSource.ts";
 import { FaBook, FaTable } from "react-icons/fa";
 import ResponsiveContainer from "../components/ResponsiveContainer.tsx";
+import { performGoogleOperation } from "../logic/util.ts";
+import { SourceConfig } from "../logic/rxdb.ts";
 
 const Configure = () => {
   const [loadingCorpus, setLoadingCorpus] = useState<boolean>(false);
   const [newSourceName, setNewSourceName] = useState<string>();
+  const [newSourceUrl, setNewSourceUrl] = useState<string>();
+  const [newSourceRemoteName, setNewSourceRemoteName] = useState<string>();
   const [newSourceType, setNewSourceType] = useState<
     "SheetsSource" | "DiarySource"
   >("SheetsSource");
+  const [newSourceSheetNames, setNewSourceSheetNames] = useState<
+    Record<string, boolean>
+  >({});
   const [newSourceDocumentId, setNewSourceDocumentId] = useState<string>();
 
   const setCorpus = useCorpusStore((state) => state.setCorpus);
@@ -29,6 +36,7 @@ const Configure = () => {
       .then((docs) => docs.map((d) => d.toJSON(true)))
       .then((configs) =>
         configs.map((config) => {
+          console.log(config);
           switch (config.sourceType) {
             case "SheetsSource":
               return new SheetsSource(config);
@@ -69,19 +77,70 @@ const Configure = () => {
   );
 
   const createSource = useCallback(() => {
-    clientRxdb.sources
-      .upsert({
-        id: v4(),
-        name: newSourceName,
-        sourceType: newSourceType,
-        documentId: newSourceDocumentId,
-      })
-      .then(() => {
-        loadSources();
-        setNewSourceName("");
-        setNewSourceDocumentId("");
-      });
-  }, [loadSources, newSourceName, newSourceDocumentId, newSourceType]);
+    if (
+      !newSourceName ||
+      !newSourceDocumentId ||
+      !newSourceRemoteName ||
+      !newSourceUrl
+    )
+      return; // TODO: some better error
+    const source: SourceConfig = {
+      id: v4(),
+      name: newSourceName,
+      sourceType: newSourceType,
+      documentId: newSourceDocumentId,
+      sheetNames: Object.entries(newSourceSheetNames)
+        .filter(([, include]) => include)
+        .map(([name]) => name),
+      remoteName: newSourceRemoteName,
+      url: newSourceUrl,
+    };
+    clientRxdb.sources.upsert(source).then(() => {
+      loadSources();
+      setNewSourceSheetNames({});
+      setNewSourceName("");
+      setNewSourceDocumentId("");
+      setNewSourceRemoteName("");
+      setNewSourceUrl("");
+    });
+  }, [
+    loadSources,
+    newSourceName,
+    newSourceDocumentId,
+    newSourceType,
+    newSourceSheetNames,
+    newSourceRemoteName,
+    newSourceUrl,
+  ]);
+
+  const clearSourceSheetNames = useCallback(() => {
+    setNewSourceSheetNames({});
+    setNewSourceRemoteName("");
+    setNewSourceUrl("");
+  }, [setNewSourceSheetNames, setNewSourceRemoteName, setNewSourceUrl]);
+
+  const loadSourceSheetNames = useCallback(async () => {
+    if (!newSourceDocumentId) return;
+    const spreadsheetResponse = await performGoogleOperation(
+      async () => await window.getGoogleSpreadsheet(newSourceDocumentId),
+    );
+    const value: Record<string, boolean> = {};
+    setNewSourceRemoteName(spreadsheetResponse.result.properties.title);
+    setNewSourceUrl(spreadsheetResponse.result.spreadsheetUrl);
+    spreadsheetResponse.result.sheets.forEach(
+      (sheet) => (value[sheet.properties.title] = true),
+    );
+    setNewSourceSheetNames(value);
+  }, [newSourceDocumentId]);
+
+  const toggleSheetName = useCallback(
+    (name: string) => {
+      const newValue = { ...newSourceSheetNames };
+      newValue[name] = !newSourceSheetNames[name];
+      setNewSourceSheetNames(newValue);
+    },
+    [newSourceSheetNames, setNewSourceSheetNames],
+  );
 
   const bgColor = useMemo(
     () => (corpus.length > 0 ? "bg-green-400" : "bg-neutral-200"),
@@ -116,7 +175,24 @@ const Configure = () => {
                 <span className="font-bold">SOURCE</span>
                 {source.getName()}
               </div>
-              <div className="flex gap-2 font-bold">
+              <div>
+                <strong>From</strong>:{" "}
+                <em>
+                  <a
+                    className="text-violet-600 cursor-pointer"
+                    href={source.getUrl()}
+                  >
+                    {source.getRemoteName()}
+                  </a>
+                </em>
+              </div>
+              {source.getSourceType() === "SheetsSource" && (
+                <div>
+                  <strong>Sheets</strong>:{" "}
+                  <em>{(source as SheetsSource).getSheetNames().join(", ")}</em>
+                </div>
+              )}
+              <div className="flex gap-2 font-bold mt-4">
                 <button
                   className="flex-1 p-2 bg-violet-300 rounded"
                   onClick={() => loadFromSource(source)}
@@ -134,38 +210,74 @@ const Configure = () => {
           ))}
           <div className="border-l-neutral-300 border-l-8 p-4 bg-neutral-100 text-neutral-700">
             <div className="text-lg mb-2 font-bold">NEW SOURCE</div>
-            <div className="flex w-full mt-2 mb-2 gap-2">
-              <button
-                className={`grow p-2 rounded ${newSourceType === "SheetsSource" ? "font-bold bg-neutral-300" : "bg-neutral-200"}`}
-                onClick={() => setNewSourceType("SheetsSource")}
-              >
-                Sheets Source
-              </button>
-              <button
-                className={`grow p-2 rounded ${newSourceType === "DiarySource" ? "font-bold bg-neutral-300" : "bg-neutral-200"}`}
-                onClick={() => setNewSourceType("DiarySource")}
-              >
-                Diary Source
-              </button>
-            </div>
-            <div>Name:</div>
-            <input
-              value={newSourceName}
-              onChange={(e) => setNewSourceName(e.target.value)}
-              className="w-full h-10 border border-neutral-300 mt-2 p-2"
-            />
-            <div className="mt-2">Document ID:</div>
-            <input
-              value={newSourceDocumentId}
-              onChange={(e) => setNewSourceDocumentId(e.target.value)}
-              className="w-full h-10 border border-neutral-300 mt-2 p-2"
-            />
-            <button
-              className="w-full p-2 mt-4 bg-green-300 text-black font-bold"
-              onClick={createSource}
-            >
-              Create
-            </button>
+            {Object.keys(newSourceSheetNames).length == 0 ? (
+              <>
+                <div className="flex w-full mt-2 mb-2 gap-2">
+                  <button
+                    className={`grow p-2 rounded ${newSourceType === "SheetsSource" ? "font-bold bg-neutral-300" : "bg-neutral-200"}`}
+                    onClick={() => setNewSourceType("SheetsSource")}
+                  >
+                    Sheets Source
+                  </button>
+                  <button
+                    className={`grow p-2 rounded ${newSourceType === "DiarySource" ? "font-bold bg-neutral-300" : "bg-neutral-200"}`}
+                    onClick={() => setNewSourceType("DiarySource")}
+                  >
+                    Diary Source
+                  </button>
+                </div>
+                <div>Name:</div>
+                <input
+                  value={newSourceName}
+                  onChange={(e) => setNewSourceName(e.target.value)}
+                  className="w-full h-10 border border-neutral-300 mt-2 p-2"
+                />
+                <div className="mt-2">Document ID:</div>
+                <input
+                  value={newSourceDocumentId}
+                  onChange={(e) => setNewSourceDocumentId(e.target.value)}
+                  className="w-full h-10 border border-neutral-300 mt-2 p-2"
+                />
+                <button
+                  className="w-full p-2 mt-4 bg-green-300 text-black font-bold"
+                  onClick={loadSourceSheetNames}
+                >
+                  Next
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="mb-2 font-bold">Select sheets to include:</div>
+                {Object.keys(newSourceSheetNames).map((name) => (
+                  <div>
+                    <input
+                      type="checkbox"
+                      id={name}
+                      value={name}
+                      checked={newSourceSheetNames[name]}
+                      onChange={() => toggleSheetName(name)}
+                    />
+                    <label className="ml-2" htmlFor={name}>
+                      {name}
+                    </label>
+                  </div>
+                ))}
+                <div className="flex gap-2">
+                  <button
+                    className="w-full p-2 mt-4 bg-neutral-300"
+                    onClick={clearSourceSheetNames}
+                  >
+                    Back
+                  </button>
+                  <button
+                    className="w-full p-2 mt-4 bg-green-300 text-black fond-bold"
+                    onClick={createSource}
+                  >
+                    Create
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </ResponsiveContainer>

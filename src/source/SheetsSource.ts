@@ -1,23 +1,14 @@
 import { CorpusItem } from "../state/corpusState.ts";
 import { itemTag, ItemTag } from "../logic/tags.ts";
 import { AbstractSource } from "./AbstractSource.ts";
+import { performGoogleOperation } from "../logic/util.ts";
 
 export class SheetsSource extends AbstractSource {
   public async loadCorpus(): Promise<CorpusItem[]> {
-    const spreadsheetResponse = await this.performGoogleOperation(
-      async () => await window.getGoogleSpreadsheet(this.config.documentId),
-    );
-
-    // Find any tabs with "Vocab" in the name.
-    const sheetNames = spreadsheetResponse.result.sheets
-      ?.map((sheet: any) => sheet.properties.title)
-      ?.filter((title: string) => title.includes("Vocab"));
-    if (!sheetNames) return [];
-
     // Loop rows, collecting corpus items.
     const items: CorpusItem[] = [];
-    for (const sheetName of sheetNames) {
-      const valuesResponse = await this.performGoogleOperation(
+    for (const sheetName of this.config.sheetNames) {
+      const valuesResponse = await performGoogleOperation(
         async () =>
           await window.getSpreadsheetValues(
             this.config.documentId,
@@ -36,6 +27,10 @@ export class SheetsSource extends AbstractSource {
 
     // Done!
     return items;
+  }
+
+  public getSheetNames() {
+    return this.config.sheetNames;
   }
 
   private processRow(

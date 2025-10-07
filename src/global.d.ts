@@ -1,10 +1,14 @@
 type SpreadsheetResponse = {
   result: {
+    properties: {
+      title: string;
+    }
     sheets: {
       properties: {
         title: string;
       }
     }[];
+    spreadsheetUrl: string;
   }
 }
 
