@@ -16,5 +16,13 @@ export abstract class AbstractSource {
     return this.config.sourceType;
   }
 
+  public getUrl(): string {
+    return this.config.url;
+  }
+
+  public getRemoteName(): string {
+    return this.config.remoteName;
+  }
+
   public abstract loadCorpus(): Promise<CorpusItem[]>;
 }

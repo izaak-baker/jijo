@@ -29,6 +29,10 @@ export class SheetsSource extends AbstractSource {
     return items;
   }
 
+  public getSheetNames() {
+    return this.config.sheetNames;
+  }
+
   private processRow(
     row: string[],
     items: CorpusItem[],

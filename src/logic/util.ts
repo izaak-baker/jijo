@@ -1,4 +1,6 @@
-export async function performGoogleOperation<T>(operation: () => T): Promise<T> {
+export async function performGoogleOperation<T>(
+  operation: () => T,
+): Promise<T> {
   if (!window.gapiClientHasToken()) {
     const storedToken = window.getStoredGapiClientToken();
     if (!storedToken) {

@@ -45,7 +45,7 @@ const Play = () => {
                 <span>No vocabulary! ({corpus.length} in Dictionary)</span>
               ) : (
                 <span>
-                  Click <strong>Next</strong> to begin!
+                  Click <strong>Skip</strong> to begin!
                 </span>
               )}
             </div>
