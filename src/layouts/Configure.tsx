@@ -23,6 +23,7 @@ const Configure = () => {
     Record<string, boolean>
   >({});
   const [newSourceDocumentId, setNewSourceDocumentId] = useState<string>();
+  const [newSourceLocale, setNewSourceLocale] = useState<string>("zh-Hant");
 
   const setCorpus = useCorpusStore((state) => state.setCorpus);
   const corpus = useCorpusStore((state) => state.corpus);
@@ -94,6 +95,7 @@ const Configure = () => {
         .map(([name]) => name),
       remoteName: newSourceRemoteName,
       url: newSourceUrl,
+      locale: newSourceLocale,
     };
     clientRxdb.sources.upsert(source).then(() => {
       loadSources();
@@ -102,6 +104,7 @@ const Configure = () => {
       setNewSourceDocumentId("");
       setNewSourceRemoteName("");
       setNewSourceUrl("");
+      setNewSourceLocale("zh-Hant");
     });
   }, [
     loadSources,
@@ -111,6 +114,7 @@ const Configure = () => {
     newSourceSheetNames,
     newSourceRemoteName,
     newSourceUrl,
+    newSourceLocale,
   ]);
 
   const clearSourceSheetNames = useCallback(() => {
@@ -187,10 +191,19 @@ const Configure = () => {
                 </em>
               </div>
               {source.getSourceType() === "SheetsSource" && (
-                <div>
-                  <strong>Sheets</strong>:{" "}
-                  <em>{(source as SheetsSource).getSheetNames().join(", ")}</em>
-                </div>
+                <>
+                  <div>
+                    <strong>Locale</strong>:{" "}
+                    {source.getLocale() === "zh-Hant" && <span>漢字</span>}
+                    {source.getLocale() === "hi" && <span>देवनागरी</span>}
+                  </div>
+                  <div>
+                    <strong>Sheets</strong>:{" "}
+                    <em>
+                      {(source as SheetsSource).getSheetNames().join(", ")}
+                    </em>
+                  </div>
+                </>
               )}
               <div className="flex gap-2 font-bold mt-4">
                 <button
@@ -247,6 +260,31 @@ const Configure = () => {
               </>
             ) : (
               <>
+                {newSourceType === "SheetsSource" && (
+                  <div className="mb-4">
+                    <div className="mb-2 font-bold">Select Locale</div>
+                    <input
+                      type="checkbox"
+                      id={"zh-Hant"}
+                      value={"zh-Hant"}
+                      checked={newSourceLocale === "zh-Hant"}
+                      onChange={() => setNewSourceLocale("zh-Hant")}
+                    />
+                    <label className="ml-2 mr-4" htmlFor={"zh-Hant"}>
+                      漢字
+                    </label>
+                    <input
+                      type="checkbox"
+                      id={"hi"}
+                      value={"hi"}
+                      checked={newSourceLocale === "hi"}
+                      onChange={() => setNewSourceLocale("hi")}
+                    />
+                    <label className="ml-2" htmlFor={"hi"}>
+                      देवनागरी
+                    </label>
+                  </div>
+                )}
                 <div className="mb-2 font-bold">Select sheets to include:</div>
                 {Object.keys(newSourceSheetNames).map((name) => (
                   <div>

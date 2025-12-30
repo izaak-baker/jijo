@@ -24,5 +24,9 @@ export abstract class AbstractSource {
     return this.config.remoteName;
   }
 
+  public getLocale(): string {
+    return this.config.locale;
+  }
+
   public abstract loadCorpus(): Promise<CorpusItem[]>;
 }
