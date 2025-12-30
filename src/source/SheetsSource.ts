@@ -71,10 +71,24 @@ export class SheetsSource extends AbstractSource {
     }
 
     items.push({
-      target: targetSource?.split("") || [],
-      romanization: romanizationSource?.split(/\s+/) || [],
+      target: this.segmentTarget(targetSource),
+      romanization: this.segmentRomanization(romanizationSource),
       native: nativeSource ? [nativeSource] : [],
       tags,
     });
+  }
+
+  private segmentTarget(targetSource: string): string[] {
+    if (!targetSource) return [];
+    const granularity = this.config.locale.includes("zh") ? "grapheme" : "word";
+    const segmenter = new Intl.Segmenter(this.config.locale, { granularity });
+    return Array.from(segmenter.segment(targetSource))
+      .map((s) => s.segment)
+      .filter((s) => s !== " ");
+  }
+
+  private segmentRomanization(romanizationSource: string): string[] {
+    if (!romanizationSource) return [];
+    return romanizationSource?.split(/\s+/) || [];
   }
 }
