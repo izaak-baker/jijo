@@ -10,6 +10,7 @@ import { FaBook, FaTable } from "react-icons/fa";
 import ResponsiveContainer from "../components/ResponsiveContainer.tsx";
 import { performGoogleOperation } from "../logic/util.ts";
 import { SourceConfig } from "../logic/rxdb.ts";
+import { useGameStore } from "../state/gameState.ts";
 
 const Configure = () => {
   const [loadingCorpus, setLoadingCorpus] = useState<boolean>(false);
@@ -26,6 +27,7 @@ const Configure = () => {
   const [newSourceLocale, setNewSourceLocale] = useState<string>("zh-Hant");
 
   const setCorpus = useCorpusStore((state) => state.setCorpus);
+  const setChosenItem = useGameStore((state) => state.setChosenItem);
   const corpus = useCorpusStore((state) => state.corpus);
   const sources = useSourceStore((state) => state.sources);
   const setSources = useSourceStore((state) => state.setSources);
@@ -61,9 +63,12 @@ const Configure = () => {
       source
         .loadCorpus()
         .then(setCorpus)
-        .finally(() => setLoadingCorpus(false));
+        .finally(() => {
+          setLoadingCorpus(false);
+          setChosenItem();
+        });
     },
-    [setCorpus],
+    [setCorpus, setChosenItem],
   );
 
   const deleteSource = useCallback(
