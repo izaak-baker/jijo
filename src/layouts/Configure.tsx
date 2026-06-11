@@ -9,6 +9,7 @@ import { AbstractSource } from "../source/AbstractSource.ts";
 import { FaBook, FaTable } from "react-icons/fa";
 import ResponsiveContainer from "../components/ResponsiveContainer.tsx";
 import { performGoogleOperation } from "../logic/util.ts";
+import { getGoogleSpreadsheet } from "../logic/google.ts";
 import { SourceConfig } from "../logic/rxdb.ts";
 import { useGameStore } from "../state/gameState.ts";
 
@@ -131,12 +132,12 @@ const Configure = () => {
   const loadSourceSheetNames = useCallback(async () => {
     if (!newSourceDocumentId) return;
     const spreadsheetResponse = await performGoogleOperation(
-      async () => await window.getGoogleSpreadsheet(newSourceDocumentId),
+      async () => await getGoogleSpreadsheet(newSourceDocumentId),
     );
     const value: Record<string, boolean> = {};
-    setNewSourceRemoteName(spreadsheetResponse.result.properties.title);
-    setNewSourceUrl(spreadsheetResponse.result.spreadsheetUrl);
-    spreadsheetResponse.result.sheets.forEach(
+    setNewSourceRemoteName(spreadsheetResponse.properties.title);
+    setNewSourceUrl(spreadsheetResponse.spreadsheetUrl);
+    spreadsheetResponse.sheets.forEach(
       (sheet) => (value[sheet.properties.title] = true),
     );
     setNewSourceSheetNames(value);

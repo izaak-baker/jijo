@@ -1,23 +1,28 @@
+import {
+  hasToken,
+  getStoredToken,
+  setToken,
+  googleLogin,
+  googleLogout,
+} from "./google.ts";
+
 export async function performGoogleOperation<T>(
-  operation: () => T,
+  operation: () => Promise<T>,
 ): Promise<T> {
-  if (!window.gapiClientHasToken()) {
-    const storedToken = window.getStoredGapiClientToken();
+  if (!hasToken()) {
+    const storedToken = getStoredToken();
     if (!storedToken) {
-      await window.googleLogin();
+      await googleLogin();
       return performGoogleOperation(operation);
     }
-    window.setGapiClientToken(storedToken);
+    setToken(storedToken);
   }
 
-  let response: T;
   try {
-    response = await operation();
+    return await operation();
   } catch (e) {
     console.error(e);
-    window.googleLogout();
+    googleLogout();
     return performGoogleOperation(operation);
   }
-
-  return response;
 }

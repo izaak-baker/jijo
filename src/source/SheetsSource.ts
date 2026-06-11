@@ -2,6 +2,7 @@ import { CorpusItem } from "../state/corpusState.ts";
 import { itemTag, ItemTag } from "../logic/tags.ts";
 import { AbstractSource } from "./AbstractSource.ts";
 import { performGoogleOperation } from "../logic/util.ts";
+import { getSpreadsheetValues } from "../logic/google.ts";
 
 export class SheetsSource extends AbstractSource {
   public async loadCorpus(): Promise<CorpusItem[]> {
@@ -10,17 +11,20 @@ export class SheetsSource extends AbstractSource {
     for (const sheetName of this.config.sheetNames) {
       const valuesResponse = await performGoogleOperation(
         async () =>
-          await window.getSpreadsheetValues(
+          await getSpreadsheetValues(
             this.config.documentId,
             `${sheetName}!A:D`,
           ),
       );
-      const range = valuesResponse.result;
-      if (!range || !range.values || range.values.length === 0) {
+      if (
+        !valuesResponse ||
+        !valuesResponse.values ||
+        valuesResponse.values.length === 0
+      ) {
         continue;
       }
       const activeTags: Record<string, string> = {};
-      for (const row of range.values) {
+      for (const row of valuesResponse.values) {
         this.processRow(row, items, activeTags);
       }
     }
