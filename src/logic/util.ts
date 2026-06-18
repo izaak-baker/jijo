@@ -13,9 +13,9 @@ export async function performGoogleOperation<T>(
     const storedToken = getStoredToken();
     if (!storedToken) {
       await googleLogin();
-      return performGoogleOperation(operation);
+    } else {
+      setToken(storedToken);
     }
-    setToken(storedToken);
   }
 
   try {
@@ -23,6 +23,7 @@ export async function performGoogleOperation<T>(
   } catch (e) {
     console.error(e);
     googleLogout();
-    return performGoogleOperation(operation);
+    await googleLogin();
+    return await operation();
   }
 }
