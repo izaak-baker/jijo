@@ -8,6 +8,7 @@ import {
 import { useGameStore } from "../state/gameState.ts";
 import { GrScorecard } from "react-icons/gr";
 import { Link, Route, Switch, useLocation } from "wouter";
+import { useCallback } from "react";
 import Configure from "./Configure.tsx";
 import Docs from "./Docs.tsx";
 import Settings from "./Settings.tsx";
@@ -21,6 +22,16 @@ const App = () => {
   const gameMode = useGameStore((state) => state.gameMode);
   const stopGame = useGameStore((state) => state.stopGame);
 
+  const handleStopClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (location === "/") {
+        e.preventDefault();
+      }
+      stopGame();
+    },
+    [location, stopGame],
+  );
+
   return (
     <div className="flex flex-col items-stretch h-full">
       <div className="h-16 bg-neutral-800 flex items-center pl-4 pr-4 text-white shrink-0">
@@ -31,12 +42,7 @@ const App = () => {
               <FaStop
                 size={ICON_SIZE}
                 className="text-white"
-                onClick={(e) => {
-                  if (location === "/") {
-                    e.preventDefault();
-                  }
-                  stopGame();
-                }}
+                onClick={handleStopClick}
               />
             </Link>
           ) : (

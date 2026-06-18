@@ -68,6 +68,16 @@ const Play = () => {
 
   const tagCount = useMemo(() => chosenItem?.tags?.length || 0, [chosenItem]);
 
+  const correctPct = lastQuizResults
+    ? Math.round((lastQuizResults.correct / lastQuizResults.total) * 100)
+    : 0;
+  const incorrectPct = lastQuizResults
+    ? Math.round((lastQuizResults.incorrect / lastQuizResults.total) * 100)
+    : 0;
+  const skippedPct = lastQuizResults
+    ? Math.round((lastQuizResults.skipped / lastQuizResults.total) * 100)
+    : 0;
+
   // Mode selection / idle screen
   if (!gameMode) {
     return (
@@ -88,25 +98,13 @@ const Play = () => {
                     </div>
                     <div className="flex gap-2 justify-center text-sm font-bold">
                       <div className="bg-green-200 text-green-600 rounded px-3 py-1">
-                        {Math.round(
-                          (lastQuizResults.correct / lastQuizResults.total) *
-                            100,
-                        )}
-                        % correct
+                        {correctPct}% correct
                       </div>
                       <div className="bg-red-200 text-red-600 rounded px-3 py-1">
-                        {Math.round(
-                          (lastQuizResults.incorrect / lastQuizResults.total) *
-                            100,
-                        )}
-                        % incorrect
+                        {incorrectPct}% incorrect
                       </div>
                       <div className="bg-neutral-200 text-neutral-600 rounded px-3 py-1">
-                        {Math.round(
-                          (lastQuizResults.skipped / lastQuizResults.total) *
-                            100,
-                        )}
-                        % skipped
+                        {skippedPct}% skipped
                       </div>
                     </div>
                   </div>
