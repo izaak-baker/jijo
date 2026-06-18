@@ -1,18 +1,19 @@
 import { AbstractSource } from "./AbstractSource.ts";
 import { CorpusItem } from "../state/corpusState.ts";
 import { performGoogleOperation } from "../logic/util.ts";
+import { getGoogleDoc } from "../logic/google.ts";
 
 export const CORPUS_ITEM_REGEX =
-  /\s?(?<target>\S+)\s\((?<romanization>([a-z]+[0-9]\s?)+)\s“(?<native>[a-zA-Z\-\s,]+)”\)/g;
+  /\s?(?<target>\S+)\s\((?<romanization>([a-z]+[0-9]\s?)+)\s"(?<native>[a-zA-Z\-\s,]+)"\)/g;
 export const TARGET_EXCEPTIONS = ["hea"];
 
 export class DiarySource extends AbstractSource {
   public async loadCorpus(): Promise<CorpusItem[]> {
-    const docResponse: DocResponse = await performGoogleOperation(
-      async () => await window.getGoogleDoc(this.config.documentId),
+    const docResponse = await performGoogleOperation(
+      async () => await getGoogleDoc(this.config.documentId),
     );
     const textRuns = [];
-    for (const { paragraph } of docResponse.result.body.content) {
+    for (const { paragraph } of docResponse.body.content) {
       if (!paragraph) continue;
       for (const { textRun } of paragraph.elements) {
         textRuns.push(textRun.content);
