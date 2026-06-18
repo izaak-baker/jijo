@@ -23,7 +23,7 @@ export type GameState = {
   toggleDisplay(key: string): void;
   stageHistoryEntry(partialEntry: Omit<SessionHistoryEntry, "outcome">): void;
   recordHistoryEntry(outcome: FlashcardOutcome): void;
-  setChosenItem(item: CorpusItem): void;
+  setChosenItem(item?: CorpusItem): void;
 };
 
 export const useGameStore = create<GameState>((set) => ({
@@ -62,7 +62,7 @@ export const useGameStore = create<GameState>((set) => ({
       };
     });
   },
-  setChosenItem(item: CorpusItem) {
+  setChosenItem(item?: CorpusItem) {
     set((state) => ({
       ...state,
       chosenItem: item,

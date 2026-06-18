@@ -28,7 +28,7 @@ const Character: FC<Props> = ({
             target: "text-6xl",
             romanized:
               !displayTarget && displayRomanized ? "text-lg" : "text-sm",
-            gap: "gap-2",
+            gap: "gap-4",
           }
         : {
             target: "text-3xl",

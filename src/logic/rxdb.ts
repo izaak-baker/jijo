@@ -6,6 +6,10 @@ export type SourceConfig = {
   name: string;
   sourceType: string;
   documentId: string;
+  sheetNames: string[];
+  url: string;
+  remoteName: string;
+  locale: string;
 };
 
 export async function setupDb(dbName: string): Promise<RxDatabase> {
@@ -16,7 +20,7 @@ export async function setupDb(dbName: string): Promise<RxDatabase> {
   });
 
   const sourceSchema = {
-    version: 1,
+    version: 4,
     primaryKey: "id",
     type: "object",
     properties: {
@@ -33,6 +37,21 @@ export async function setupDb(dbName: string): Promise<RxDatabase> {
       documentId: {
         type: "string",
       },
+      sheetNames: {
+        type: "array",
+        items: {
+          type: "string",
+        },
+      },
+      sourceUrl: {
+        type: "string",
+      },
+      sourceRemoteName: {
+        type: "string",
+      },
+      locale: {
+        type: "string",
+      },
     },
     required: ["id", "name", "sourceType", "documentId"],
   };
@@ -47,6 +66,22 @@ export async function setupDb(dbName: string): Promise<RxDatabase> {
           delete v1.spreadsheetId;
           v1.sourceType = "SheetsSource";
           return v1;
+        },
+        2: (v1) => {
+          const v2 = structuredClone(v1);
+          v2.sheetNames = [];
+          return v2;
+        },
+        3: (v2) => {
+          const v3 = structuredClone(v2);
+          v3.sourceUrl = "";
+          v3.sourceRemoteName = "";
+          return v3;
+        },
+        4: (v3) => {
+          const v4 = structuredClone(v3);
+          v4.locale = "zh-Hant";
+          return v4;
         },
       },
     },

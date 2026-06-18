@@ -3,9 +3,17 @@ import { RxLetterCaseCapitalize } from "react-icons/rx";
 import { FaAnglesLeft, FaHashtag, FaCheck, FaX } from "react-icons/fa6";
 import { useCorpusStore } from "../state/corpusState.ts";
 import { FlashcardOutcome, useGameStore } from "../state/gameState.ts";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import CorpusItemCard from "../components/CorpusItemCard.tsx";
 import FooterButton from "../components/FooterButton.tsx";
+import { ItemTag, tagKey, tagValue } from "../logic/tags.ts";
+
+const TAG_COLOR_ORDER: string[] = [
+  "bg-violet-500",
+  "bg-violet-400",
+  "bg-violet-300",
+  "bg-violet-200",
+];
 
 const Play = () => {
   const corpus = useCorpusStore((state) => state.corpus);
@@ -34,8 +42,18 @@ const Play = () => {
     ],
   );
 
+  const tagCount = useMemo(() => chosenItem?.tags?.length || 0, [chosenItem]);
+
   return (
     <div className="flex flex-col items-stretch h-full">
+      {display.tags &&
+        chosenItem?.tags?.map((tag: ItemTag, i: number) => (
+          <div
+            className={`p-1 w-full ${TAG_COLOR_ORDER[Math.min(TAG_COLOR_ORDER.length - tagCount + i, TAG_COLOR_ORDER.length - 1)]}`}
+          >
+            <strong>{tagKey(tag)}</strong> = {tagValue(tag)}
+          </div>
+        ))}
       <div className="grow p-4 flex flex-col items-center justify-center">
         {!chosenItem ? (
           <div className="flex flex-col gap-4 items-center">
@@ -45,7 +63,7 @@ const Play = () => {
                 <span>No vocabulary! ({corpus.length} in Dictionary)</span>
               ) : (
                 <span>
-                  Click <strong>Next</strong> to begin!
+                  Click <strong>START</strong> to begin!
                 </span>
               )}
             </div>
@@ -102,7 +120,7 @@ const Play = () => {
           disposition="info"
           onClick={() => handleNextButtonClick("skip")}
         >
-          SKIP
+          {chosenItem ? "SKIP" : "START"}
         </FooterButton>
         <FooterButton
           disposition="success"
