@@ -92,7 +92,7 @@ export async function googleLogin(): Promise<void> {
       localStorage.setItem(ACCESS_TOKEN_LS_KEY, resp.access_token);
       resolve();
     };
-    client.requestAccessToken({ prompt: "consent" });
+    client.requestAccessToken({ prompt: "" });
   });
 }
 
