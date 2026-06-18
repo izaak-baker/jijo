@@ -123,6 +123,17 @@ const Configure = () => {
     newSourceLocale,
   ]);
 
+  const handleDocumentIdChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      const match = value.match(
+        /docs\.google\.com\/(?:spreadsheets|document)\/d\/([a-zA-Z0-9_-]+)/,
+      );
+      setNewSourceDocumentId(match ? match[1] : value);
+    },
+    [],
+  );
+
   const clearSourceSheetNames = useCallback(() => {
     setNewSourceSheetNames({});
     setNewSourceRemoteName("");
@@ -251,11 +262,12 @@ const Configure = () => {
                   onChange={(e) => setNewSourceName(e.target.value)}
                   className="w-full h-10 border border-neutral-300 mt-2 p-2"
                 />
-                <div className="mt-2">Document ID:</div>
+                <div className="mt-2">Document ID or URL:</div>
                 <input
                   value={newSourceDocumentId}
-                  onChange={(e) => setNewSourceDocumentId(e.target.value)}
+                  onChange={handleDocumentIdChange}
                   className="w-full h-10 border border-neutral-300 mt-2 p-2"
+                  placeholder="Paste a Google Docs/Sheets URL or document ID"
                 />
                 <button
                   className="w-full p-2 mt-4 bg-green-300 text-black font-bold"

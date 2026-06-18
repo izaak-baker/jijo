@@ -24,26 +24,117 @@ const Play = () => {
   const recordHistoryEntry = useGameStore((state) => state.recordHistoryEntry);
   const display = useGameStore((state) => state.display);
   const setChosenItem = useGameStore((state) => state.setChosenItem);
+  const gameMode = useGameStore((state) => state.gameMode);
+  const quizQueue = useGameStore((state) => state.quizQueue);
+  const quizIndex = useGameStore((state) => state.quizIndex);
+  const startGame = useGameStore((state) => state.startGame);
+  const stopGame = useGameStore((state) => state.stopGame);
+  const lastQuizResults = useGameStore((state) => state.lastQuizResults);
 
   const handleNextButtonClick = useCallback(
     (outcome: FlashcardOutcome) => {
-      const indexChosen = Math.floor(Math.random() * filteredCorpus.length);
-      const item = filteredCorpus[indexChosen];
-      setChosenItem(item);
       recordHistoryEntry(outcome);
-      stageHistoryEntry({ display, item });
+
+      if (gameMode === "quiz") {
+        const nextIndex = quizIndex + 1;
+        if (nextIndex >= quizQueue.length) {
+          // Quiz complete — stopGame will compute results
+          stopGame();
+          return;
+        }
+        const item = quizQueue[nextIndex];
+        setChosenItem(item);
+        useGameStore.setState({ quizIndex: nextIndex });
+        stageHistoryEntry({ display, item });
+      } else {
+        const indexChosen = Math.floor(Math.random() * filteredCorpus.length);
+        const item = filteredCorpus[indexChosen];
+        setChosenItem(item);
+        stageHistoryEntry({ display, item });
+      }
     },
     [
+      gameMode,
+      quizQueue,
+      quizIndex,
       setChosenItem,
       filteredCorpus,
       display,
       recordHistoryEntry,
       stageHistoryEntry,
+      stopGame,
     ],
   );
 
   const tagCount = useMemo(() => chosenItem?.tags?.length || 0, [chosenItem]);
 
+  const correctPct = lastQuizResults
+    ? Math.round((lastQuizResults.correct / lastQuizResults.total) * 100)
+    : 0;
+  const incorrectPct = lastQuizResults
+    ? Math.round((lastQuizResults.incorrect / lastQuizResults.total) * 100)
+    : 0;
+  const skippedPct = lastQuizResults
+    ? Math.round((lastQuizResults.skipped / lastQuizResults.total) * 100)
+    : 0;
+
+  // Mode selection / idle screen
+  if (!gameMode) {
+    return (
+      <div className="flex flex-col items-stretch h-full">
+        <div className="grow p-4 flex flex-col items-center justify-center">
+          <div className="flex flex-col gap-4 items-center">
+            <div className="text-7xl font-bold text-neutral-300">自助</div>
+            {filteredCorpus.length === 0 ? (
+              <div className="text-lg text-neutral-400">
+                No vocabulary! ({corpus.length} in Dictionary)
+              </div>
+            ) : (
+              <>
+                {lastQuizResults && (
+                  <div className="w-full max-w-xs mb-4">
+                    <div className="text-sm font-bold text-neutral-500 text-center mb-2">
+                      Last Quiz
+                    </div>
+                    <div className="flex gap-2 justify-center text-sm font-bold">
+                      <div className="bg-green-200 text-green-600 rounded px-3 py-1">
+                        {correctPct}% correct
+                      </div>
+                      <div className="bg-red-200 text-red-600 rounded px-3 py-1">
+                        {incorrectPct}% incorrect
+                      </div>
+                      <div className="bg-neutral-200 text-neutral-600 rounded px-3 py-1">
+                        {skippedPct}% skipped
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div className="flex gap-4">
+                  <button
+                    className="px-8 py-4 bg-violet-500 text-white font-bold text-lg rounded"
+                    onClick={() => startGame("quiz", filteredCorpus)}
+                  >
+                    Quiz
+                  </button>
+                  <button
+                    className="px-8 py-4 bg-neutral-500 text-white font-bold text-lg rounded"
+                    onClick={() => startGame("endless", filteredCorpus)}
+                  >
+                    Endless
+                  </button>
+                </div>
+                <div className="text-sm text-neutral-400 mt-2">
+                  {filteredCorpus.length} items
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Active game screen
   return (
     <div className="flex flex-col items-stretch h-full">
       {display.tags &&
@@ -55,21 +146,11 @@ const Play = () => {
           </div>
         ))}
       <div className="grow p-4 flex flex-col items-center justify-center">
-        {!chosenItem ? (
-          <div className="flex flex-col gap-4 items-center">
-            <div className="text-7xl font-bold text-neutral-300">自助</div>
-            <div className="text-lg text-neutral-400">
-              {filteredCorpus.length === 0 ? (
-                <span>No vocabulary! ({corpus.length} in Dictionary)</span>
-              ) : (
-                <span>
-                  Click <strong>START</strong> to begin!
-                </span>
-              )}
-            </div>
+        {chosenItem && <CorpusItemCard item={chosenItem} />}
+        {gameMode === "quiz" && (
+          <div className="text-sm text-neutral-400 mt-4">
+            {quizIndex + 1} / {quizQueue.length}
           </div>
-        ) : (
-          <CorpusItemCard item={chosenItem} />
         )}
       </div>
       <div className="h-20 flex items-center gap-2 justify-center text-2xl mb-1">
@@ -120,7 +201,7 @@ const Play = () => {
           disposition="info"
           onClick={() => handleNextButtonClick("skip")}
         >
-          {chosenItem ? "SKIP" : "START"}
+          SKIP
         </FooterButton>
         <FooterButton
           disposition="success"
